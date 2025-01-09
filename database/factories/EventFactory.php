@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\Event;
 use App\Models\Venue;
 use App\Models\Speaker;
+use Carbon\Carbon;
 
 class EventFactory extends Factory
 {
@@ -23,6 +24,37 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        // First determine status with weighted randomization
+        $status = $this->faker->randomElement([
+            'Upcoming',
+            'Upcoming',
+            'Upcoming',
+            'Ongoing',
+            'Completed',
+            'Completed',
+            'Archived'
+        ]);
+
+        // Set date ranges based on status
+        switch ($status) {
+            case 'Completed':
+                $startDate = $this->faker->dateTimeBetween('-1 year', '-1 day');
+                break;
+            case 'Archived':
+                $startDate = $this->faker->dateTimeBetween('-2 years', '-1 year');
+                break;
+            case 'Ongoing':
+                $startDate = $this->faker->dateTimeBetween('-2 days', 'now');
+                break;
+            case 'Upcoming':
+            default:
+                $startDate = $this->faker->dateTimeBetween('+1 day', '+6 months');
+                break;
+        }
+
+        $startTime = $this->faker->dateTimeBetween('08:00', '20:00')->format('H:i:s');
+        $endTime = (new \DateTime($startTime))->add(new \DateInterval('PT' . $this->faker->numberBetween(1, 3) . 'H'))->format('H:i:s');
+
         return [
             'name' => $this->faker->randomElement(['Senior Highschool Graduation', 'Semester Orientation', 'Coding Workshop', 'Career Conference', 'Sports Day', 'Art Exhibition', 'Science Fair', 'Music Festival']),
             'description' => $this->faker->randomElement([
@@ -35,14 +67,14 @@ class EventFactory extends Factory
                 "The art exhibition showcases student artwork, with each piece displayed in a designated area, attracting art enthusiasts and potential buyers.",
                 "The music festival features local and international bands, with students dancing in the aisles, enjoying the diverse music lineup.",
             ]),
-            'start_date' => $start_date = $this->faker->dateTimeBetween('now', '+2 years')->format('d-m-Y'),
-            'end_date' => $start_date,
-            'start_time' => $start_time = $this->faker->dateTimeBetween('08:00', '20:00')->format('H:i:s'),
-            'end_time' => (new \DateTime($start_time))->add(new \DateInterval('PT' . $this->faker->numberBetween(1, 3) . 'H'))->format('H:i:s'),
+            'start_date' => $startDate->format('d-m-Y'),
+            'end_date' => $startDate->format('d-m-Y'),
+            'start_time' => $startTime,
+            'end_time' => $endTime,
             'image' => 'https://picsum.photos/seed/' . Str::uuid() . '/640/480',
-            'status' => $this->faker->randomElement(['Archived', 'Upcoming', 'Ongoing', 'Completed']),
+            'status' => $status,
             'speaker_id' => function () {
-                return Speaker::query()->inRandomOrder()->first()?->id 
+                return Speaker::query()->inRandomOrder()->first()?->id
                     ?? Speaker::factory()->create()->id;
             },
         ];

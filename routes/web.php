@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Livewire\AdminDashboard;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 Route::view('/', 'livewire.pages.welcome')->name('welcome');
 
@@ -45,14 +46,26 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 });
 
-Route::get('/test-mail', function () {
+Route::get('/test-email', function () {
     try {
         Mail::raw('Testing Postmark integration for EventSphere', function ($message) {
-            $message->to('your-test-email@example.com')
+            $message->to('shawnehart.nuque@email.lcup.edu.ph')
                 ->subject('Test Email from EventSphere');
         });
 
         return 'Email sent successfully!';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
+Route::get('/test-notification', function () {
+    $user = Auth::user();
+    $event = \App\Models\Event::first();
+
+    try {
+        $user->notify(new \App\Notifications\EventRegistration($event, 'registration'));
+        return 'Notification sent successfully!';
     } catch (\Exception $e) {
         return 'Error: ' . $e->getMessage();
     }

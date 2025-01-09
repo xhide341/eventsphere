@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Queue\SerializesModels;
+
 class Event extends Model
 {
-    use HasFactory;
+    use HasFactory, SerializesModels;
 
     /**
      * The attributes that are mass assignable.
@@ -92,25 +94,25 @@ class Event extends Model
         return $query->where(function ($query) use ($startDate, $endDate, $startTime, $endTime) {
             // Check 1: Is there any event that starts during our timeframe?
             $query->whereBetween('start_date', [$startDate, $endDate])
-            
-            // Check 2: Is there any event that ends during our timeframe?
-            ->orWhereBetween('end_date', [$startDate, $endDate])
-            
-            // Check 3: Is there any event that completely surrounds our timeframe?
-            ->orWhere(function ($q) use ($startDate, $endDate) {
-                $q->where('start_date', '<=', $startDate)
-                  ->where('end_date', '>=', $endDate);
-            });
+
+                // Check 2: Is there any event that ends during our timeframe?
+                ->orWhereBetween('end_date', [$startDate, $endDate])
+
+                // Check 3: Is there any event that completely surrounds our timeframe?
+                ->orWhere(function ($q) use ($startDate, $endDate) {
+                    $q->where('start_date', '<=', $startDate)
+                        ->where('end_date', '>=', $endDate);
+                });
         })
-        // AND do the same checks for time
-        ->where(function ($query) use ($startTime, $endTime) {
-            // Same three checks but for time
-            $query->whereBetween('start_time', [$startTime, $endTime])
-                  ->orWhereBetween('end_time', [$startTime, $endTime])
-                  ->orWhere(function ($q) use ($startTime, $endTime) {
-                      $q->where('start_time', '<=', $startTime)
+            // AND do the same checks for time
+            ->where(function ($query) use ($startTime, $endTime) {
+                // Same three checks but for time
+                $query->whereBetween('start_time', [$startTime, $endTime])
+                    ->orWhereBetween('end_time', [$startTime, $endTime])
+                    ->orWhere(function ($q) use ($startTime, $endTime) {
+                    $q->where('start_time', '<=', $startTime)
                         ->where('end_time', '>=', $endTime);
-                  });
-        });
+                });
+            });
     }
 }

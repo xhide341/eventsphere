@@ -11,6 +11,7 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\EventRegistration;
 
 #[Layout('layouts.app')]
 class EventDetailsPage extends Component
@@ -26,10 +27,19 @@ class EventDetailsPage extends Component
     public $feedbackCount;
     public $eventData;
     public $showAllFeedback = false;
+    public $showConfirmationModal = false;
+    public $modalAction = ''; // 'register' or 'cancel'
+    public $eventCompleted = false;
 
     public function mount(Event $event)
     {
         $this->event = $event;
+        $this->eventCompleted = Carbon::parse($this->event->start_date) < Carbon::now();
+
+        if (Auth::check()) {
+            $this->isRegistered = $this->event->users()->where('user_id', Auth::id())->exists();
+        }
+
         $this->loadEventData();
         $this->eventData = $this->getEventData();
     }
@@ -109,32 +119,92 @@ class EventDetailsPage extends Component
             ->get();
     }
 
-    public function toggleRegistration()
+    public function confirmRegistration()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+        \Log::info('Confirm Registration called');
+        $this->modalAction = $this->isRegistered ? 'cancel' : 'register';
+        $this->showConfirmationModal = true;
+        \Log::info('Modal state:', [
+            'showConfirmationModal' => $this->showConfirmationModal,
+            'modalAction' => $this->modalAction
+        ]);
+    }
 
-        if ($this->isRegistered) {
-            $this->event->users()->detach(Auth::id());
-        } else {
-            // Check if event is at capacity
-            if ($this->event->participant_count >= $this->event->capacity) {
-                session()->flash('error', 'This event has reached its capacity.');
-                return;
+    public function handleRegistration()
+    {
+        \Log::info('Handle Registration called');
+
+        try {
+            if (!Auth::check()) {
+                \Log::info('User not authenticated');
+                return redirect()->route('login');
             }
 
-            $this->event->users()->attach(Auth::id(), [
-                'registration_date' => now()
+
+            if ($this->isRegistered) {
+                \Log::info('Cancelling registration for event: ' . $this->event->id);
+                $this->event->users()->detach(Auth::id());
+                // Add debug for cancellation notification
+                try {
+                    Auth::user()->notify(new EventRegistration($this->event, 'cancellation'));
+                    \Log::info('Cancellation notification sent successfully');
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send cancellation notification:', ['error' => $e->getMessage()]);
+                }
+            } else {
+                // Check if event is at capacity using venue capacity
+                $currentParticipants = $this->event->users()->count();
+                if ($currentParticipants >= $this->event->venue->capacity) {
+                    \Log::info('Event at capacity: ' . $this->event->id . ', Venue capacity: ' . $this->event->venue->capacity);
+                    session()->flash('error', 'This event has reached its capacity.');
+                    $this->showConfirmationModal = false;
+                    return;
+                }
+
+                \Log::info('Registering for event: ' . $this->event->id);
+                $this->event->users()->attach(Auth::id(), [
+                    'registration_date' => now()
+                ]);
+                try {
+                    $notification = new EventRegistration($this->event, 'registration');
+                    \Log::info('Attempting to send notification:', [
+                        'user_id' => Auth::id(),
+                        'event_id' => $this->event->id,
+                        'notification_class' => get_class($notification),
+                        'channels' => $notification->via(Auth::user())
+                    ]);
+
+                    Auth::user()->notify($notification);
+
+                    \Log::info('Notification sent successfully');
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send notification:', [
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString(),
+                        'user_id' => Auth::id(),
+                        'event_id' => $this->event->id
+                    ]);
+                }
+            }
+
+            $this->event->refresh();
+            $this->isRegistered = !$this->isRegistered;
+            $this->showConfirmationModal = false;
+
+            session()->flash('message', $this->isRegistered
+                ? 'Successfully registered for the event.'
+                : 'Registration cancelled successfully.');
+
+        } catch (\Exception $e) {
+            \Log::error('Registration error:', [
+                'event_id' => $this->event->id,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage()
             ]);
+
+            session()->flash('error', 'There was an error processing your registration.');
+            $this->showConfirmationModal = false;
         }
-
-        $this->event->refresh();
-        $this->isRegistered = !$this->isRegistered;
-
-        session()->flash('message', $this->isRegistered
-            ? 'Successfully registered for the event.'
-            : 'Registration cancelled successfully.');
     }
 
     public function editFeedback()
