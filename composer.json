@@ -15,7 +15,9 @@
         "laravel/tinker": "^2.9",
         "league/flysystem-aws-s3-v3": "3.0",
         "livewire/livewire": "^3.4",
-        "livewire/volt": "^1.6"
+        "livewire/volt": "^1.6",
+        "symfony/http-client": "*",
+        "symfony/postmark-mailer": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
