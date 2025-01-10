@@ -12,6 +12,10 @@ class EventRegistration extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $tries = 3;        // Stop after 3 failed attempts
+    public $timeout = 30;     // Fail if takes longer than 30 seconds
+    public $backoff = [60, 120, 180];  // Wait 1, 2, 3 minutes between retries
+
     protected $event;
     protected $type;
 
