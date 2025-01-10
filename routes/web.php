@@ -22,7 +22,7 @@ Route::get('/events', EventsPage::class)
     ->name('events');
 
 Route::view('profile', 'livewire.pages.profile')
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('profile');
 
 Route::get('/venues', VenuesPage::class)
