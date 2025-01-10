@@ -20,7 +20,7 @@
         <h4 class="mx-2 mt-2 font-medium text-primary-dark" 
             x-data="{name: '{{ auth()->user()->name }}'}" 
             x-text="name"></h4>
-        <p class="mx-2 mt-1 text-sm font-sm text-gray-600">{{ auth()->user()->email }}</p>
+        <p class="mx-2 mt-1 text-xs font-sm text-gray-600">{{ auth()->user()->email }}</p>
     </div>
 
     <hr class="w-full border-t border-gray-300 my-6">

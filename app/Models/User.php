@@ -19,8 +19,9 @@ use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, CanResetPassword
+class User extends Authenticatable implements FilamentUser, HasAvatar, CanResetPassword, MustVerifyEmail
 {
     use HasFactory, Notifiable, CanResetPasswordTrait;
 
