@@ -8,11 +8,12 @@
 
     <title>
         {{ config('app.name', 'eventsphere') }} |
-        @if(Route::currentRouteName() === 'event.details')
-            Event Details
-        @else
-            {{ ucfirst(Route::currentRouteName()) }}
-        @endif
+        @php
+            $routeName = Route::currentRouteName();
+            $formattedName = str_replace('.', ' ', $routeName);
+            $formattedName = ucwords($formattedName);
+        @endphp
+        {{ $formattedName }}
     </title>
     <link rel="icon" href="{{ Vite::asset('resources/images/LCUP.ico') }}" type="image/x-icon" sizes="16x16">
 
