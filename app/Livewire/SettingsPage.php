@@ -23,7 +23,11 @@ class SettingsPage extends Component
         $user->event_notifications_enabled = !$user->event_notifications_enabled;
         $user->save();
 
-        session()->flash('message', 'Notification preferences updated successfully');
+        try {
+            notify()->success('Notification preferences updated successfully.');
+        } catch (\Exception $e) {
+            notify()->error('Failed to update notification preferences.');
+        }
     }
 
     public function render()
