@@ -34,7 +34,11 @@ class EventDetailsPage extends Component
     public function mount(Event $event)
     {
         $this->event = $event;
-        $this->eventCompleted = Carbon::parse($this->event->start_date) < Carbon::now();
+
+        $eventEndDateTime = Carbon::parse($this->event->end_date)
+            ->setTimeFrom(Carbon::parse($this->event->end_time));
+
+        $this->eventCompleted = $eventEndDateTime->isPast();
 
         if (Auth::check()) {
             $this->isRegistered = $this->event->users()->where('user_id', Auth::id())->exists();

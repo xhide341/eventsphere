@@ -13,14 +13,22 @@ class EventCard extends Component
     public Event $event;
     public $type;
     public $modalContent;
+    public $eventCompleted;
 
     public function mount(Event $event, $type)
     {
         $this->event = $event;
         $this->type = $type;
+
+        // Add event completion check
+        $eventEndDateTime = Carbon::parse($this->event->end_date)
+            ->setTimeFrom(Carbon::parse($this->event->end_time));
+
+        $this->eventCompleted = $eventEndDateTime->isPast();
+
         $this->modalContent = $this->getModalContent();
     }
-    
+
     #[Computed]
     public function getModalContent()
     {
@@ -38,14 +46,15 @@ class EventCard extends Component
             'participant_count' => $this->getParticipantCount(),
             'is_user_registered' => $this->isUserRegistered(),
             'countdown' => $this->getCountdown(),
+            'event_completed' => $this->eventCompleted
         ];
     }
-    
+
     public function getParticipantCount()
     {
         return $this->event->users()->count();
     }
-    
+
     public function isUserRegistered()
     {
         return Auth::check() && $this->event->isUserRegistered(Auth::user()->id);
@@ -55,20 +64,15 @@ class EventCard extends Component
     {
         try {
             // Start DateTime
-            $startDateTime = Carbon::parse($this->event->start_date->toDateString())
-                ->setHour($this->event->start_time->hour)
-                ->setMinute($this->event->start_time->minute)
-                ->setSecond($this->event->start_time->second);
+            $startDateTime = Carbon::parse($this->event->start_date)
+                ->setTimeFrom(Carbon::parse($this->event->start_time));
 
             // End DateTime
-            $endDateTime = Carbon::parse($this->event->start_date->toDateString())
-                ->setHour($this->event->end_time->hour)
-                ->setMinute($this->event->end_time->minute)
-                ->setSecond($this->event->end_time->second);
+            $endDateTime = Carbon::parse($this->event->end_date)
+                ->setTimeFrom(Carbon::parse($this->event->end_time));
 
-            // Rest of your countdown logic remains the same
             $now = Carbon::now();
-            
+
             if ($now->gt($endDateTime)) {
                 return 'Event has ended';
             }
@@ -112,12 +116,12 @@ class EventCard extends Component
         try {
             // Create a new Carbon instance from the date
             $dateTime = Carbon::parse($this->event->start_date->toDateString());
-            
+
             // Set the time from the time object
             $dateTime->setHour($this->event->start_time->hour)
-                    ->setMinute($this->event->start_time->minute)
-                    ->setSecond($this->event->start_time->second);
-            
+                ->setMinute($this->event->start_time->minute)
+                ->setSecond($this->event->start_time->second);
+
             return $dateTime->format('M j, Y g:i A');
         } catch (\Exception $e) {
             return 'Invalid date format';
