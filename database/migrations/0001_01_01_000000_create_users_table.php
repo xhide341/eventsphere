@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('avatar')->nullable();
             $table->string('avatar_type')->nullable();
             $table->string('google_id')->nullable();
+            $table->boolean('event_notifications_enabled')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

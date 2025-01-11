@@ -27,15 +27,19 @@ class EventRegistration extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
+        $channels = ['database']; // Always send database notification
+
+        if ($notifiable->event_notifications_enabled) {
+            $channels[] = 'mail';
+        }
+
         \Log::info('Notification channels being used:', [
-            'channels' => ['mail', 'database'],
+            'channels' => $channels,
             'notifiable_id' => $notifiable->id,
             'event_id' => $this->event->id,
             'type' => $this->type
         ]);
 
-        // Make sure both channels are included in the serialized job
-        $channels = ['mail', 'database'];
         return $channels;
     }
 

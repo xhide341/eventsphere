@@ -24,31 +24,30 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        // First determine status with weighted randomization
+        // Adjust status weights to favor upcoming events
         $status = $this->faker->randomElement([
             'Upcoming',
             'Upcoming',
             'Upcoming',
             'Ongoing',
             'Completed',
-            'Completed',
-            'Archived'
+            'Upcoming',
+            'Upcoming',
+            'Upcoming',
+            'Upcoming'
         ]);
 
-        // Set date ranges based on status
+        // Adjust date ranges
         switch ($status) {
             case 'Completed':
-                $startDate = $this->faker->dateTimeBetween('-1 year', '-1 day');
-                break;
-            case 'Archived':
-                $startDate = $this->faker->dateTimeBetween('-2 years', '-1 year');
+                $startDate = $this->faker->dateTimeBetween('-2 months', '-1 day'); // Past events
                 break;
             case 'Ongoing':
-                $startDate = $this->faker->dateTimeBetween('-2 days', 'now');
+                $startDate = $this->faker->dateTimeBetween('-1 day', 'now');
                 break;
             case 'Upcoming':
             default:
-                $startDate = $this->faker->dateTimeBetween('+1 day', '+6 months');
+                $startDate = $this->faker->dateTimeBetween('+1 day', '+3 months'); // Next 3 months
                 break;
         }
 
@@ -56,7 +55,16 @@ class EventFactory extends Factory
         $endTime = (new \DateTime($startTime))->add(new \DateInterval('PT' . $this->faker->numberBetween(1, 3) . 'H'))->format('H:i:s');
 
         return [
-            'name' => $this->faker->randomElement(['Senior Highschool Graduation', 'Semester Orientation', 'Coding Workshop', 'Career Conference', 'Sports Day', 'Art Exhibition', 'Science Fair', 'Music Festival']),
+            'name' => $this->faker->randomElement([
+                'Senior Highschool Graduation',
+                'Semester Orientation',
+                'Coding Workshop',
+                'Career Conference',
+                'Sports Day',
+                'Art Exhibition',
+                'Science Fair',
+                'Music Festival'
+            ]),
             'description' => $this->faker->randomElement([
                 "The annual cultural festival brings together students from various departments, filling the campus courtyard with vibrant booths showcasing art, music, and traditional cuisine.",
                 "The auditorium buzzes with excitement as students gather for the highly anticipated guest lecture, with rows of chairs neatly arranged in front of the large projection screen.",

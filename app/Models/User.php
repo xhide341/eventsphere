@@ -39,6 +39,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, CanResetP
         'avatar_type',
         'role',
         'email_verified_at',
+        'event_notification_enabled',
     ];
 
     /**
@@ -61,6 +62,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, CanResetP
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'event_notification_enabled' => 'boolean',
         ];
     }
 

@@ -28,7 +28,44 @@
                     {{ __('Settings') }}
                 </h2>
 
+                <!-- Notification Settings Section -->
+                <div class="border-b border-gray-200 pb-5">
+                    <h2 class="text-lg font-medium text-gray-900">
+                        {{ __('Notification Preferences') }}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500">
+                        {{ __('Manage how you receive notifications about events.') }}
+                    </p>
+                </div>
+
                 <div class="mt-6">
+                    <!-- Event Notifications Toggle -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-col flex-grow">
+                            <span class="text-sm font-medium text-gray-900">Event Notifications</span>
+                            <span class="text-sm text-gray-500">
+                                Receive email notifications for event registrations and cancellations
+                            </span>
+                        </div>
+                        <button wire:click="toggleNotifications" type="button"
+                            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 {{ auth()->user()->event_notifications_enabled ? 'bg-primary' : 'bg-gray-200' }}"
+                            role="switch"
+                            aria-checked="{{ auth()->user()->event_notifications_enabled ? 'true' : 'false' }}">
+                            <span aria-hidden="true"
+                                class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ auth()->user()->event_notifications_enabled ? 'translate-x-5' : 'translate-x-0' }}"></span>
+                        </button>
+                    </div>
+
+                    <!-- Success Message -->
+                    @if (session()->has('message'))
+                        <div class="mt-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg">
+                            {{ session('message') }}
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Logout Section -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
                     <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-logout')">
                         {{ __('Logout') }}
                     </x-danger-button>
