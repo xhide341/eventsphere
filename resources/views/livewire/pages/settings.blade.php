@@ -24,25 +24,19 @@
     <div class="mt-4 font-poppins">
         <div class="space-y-6 overflow-hidden">
             <div class="bg-white shadow-sm rounded-lg flex flex-col p-4 sm:p-8">
-                <h2 class="text-lg font-medium text-gray-900 align-middle">
-                    {{ __('Settings') }}
+                <h2 class="text-lg font-medium text-primary-dark align-middle">
+                    {{ __('Notifications') }}
                 </h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    {{ __('Configure your notification preferences.') }}
+                </p>
 
-                <!-- Notification Settings Section -->
-                <div class="border-b border-gray-200 pb-5">
-                    <h2 class="text-lg font-medium text-gray-900">
-                        {{ __('Notification Preferences') }}
-                    </h2>
-                    <p class="mt-1 text-sm text-gray-500">
-                        {{ __('Manage how you receive notifications about events.') }}
-                    </p>
-                </div>
-
-                <div class="mt-6">
+                <div class="mt-6 flex flex-col gap-4">
                     <!-- Event Notifications Toggle -->
+                    <div class="h-px w-full bg-gray-200"></div>
                     <div class="flex items-center justify-between">
                         <div class="flex flex-col flex-grow">
-                            <span class="text-sm font-medium text-gray-900">Event Notifications</span>
+                            <span class="text-sm font-medium text-primary-dark">Event Notifications</span>
                             <span class="text-sm text-gray-500">
                                 Receive email notifications for event registrations and cancellations
                             </span>
@@ -63,21 +57,29 @@
                         </div>
                     @endif
                 </div>
+            </div>
 
-                <!-- Logout Section -->
-                <div class="mt-6 pt-6 border-t border-gray-200">
+            <!-- Logout Section -->
+            <div class="bg-white shadow-sm rounded-lg p-4 sm:p-8">
+                <h2 class="text-lg font-medium text-primary-dark">
+                    {{ __('Account') }}
+                </h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    {{ __('Manage your account session.') }}
+                </p>
+
+                <div class="mt-6">
                     <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-logout')">
                         {{ __('Logout') }}
                     </x-danger-button>
                 </div>
             </div>
-
         </div>
     </div>
 
     <x-modal name="confirm-logout" :show="false" focusable>
         <form wire:submit="logout" class="p-6">
-            <h2 class="text-lg font-medium text-gray-900">
+            <h2 class="text-lg font-medium text-primary-dark">
                 {{ __('Are you sure you want to logout?') }}
             </h2>
 
