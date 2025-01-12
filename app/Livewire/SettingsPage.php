@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SettingsPage extends Component
 {
@@ -19,14 +20,12 @@ class SettingsPage extends Component
 
     public function toggleNotifications()
     {
-        $user = auth()->user();
-        $user->event_notifications_enabled = !$user->event_notifications_enabled;
-        $user->save();
-
         try {
-            notify()->success('Notification preferences updated successfully.');
+            $user = auth()->user();
+            $user->event_notifications_enabled = !$user->event_notifications_enabled;
+            $user->save();
         } catch (\Exception $e) {
-            notify()->error('Failed to update notification preferences.');
+            Log::error('Failed to update notification preferences: ' . $e->getMessage());
         }
     }
 

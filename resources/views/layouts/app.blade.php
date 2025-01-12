@@ -46,7 +46,7 @@
         </main>
     </div>
 
-    <x-notify::notify />
+    @include('notify::components.notify')
     @notifyJs
     @livewireScripts
 </body>
