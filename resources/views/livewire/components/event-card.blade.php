@@ -51,10 +51,10 @@
       <div class="pt-6 px-6 pb-0 2xl:pb-4">
         <div class="mb-3 flex flex-col justify-between">
           <h5
-            class="block text-lg 2xl:text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased truncate">
+            class="block text-lg 2xl:text-xl font-medium leading-snug tracking-normal text-primary-dark antialiased truncate">
             {{ $modalContent['event_name'] }}
           </h5>
-          <p class="text-sm font-normal text-primary-dark-dark overflow-hidden truncate">
+          <p class="text-sm font-normal text-primary-dark overflow-hidden truncate">
             {{ $modalContent['venue_name'] }}
           </p>
         </div>
@@ -69,7 +69,7 @@
       <div class="flex w-full p-6 lg:hidden 2xl:block">
         <div class="flex justify-evenly w-full">
           <span data-tooltip-target="money"
-            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark-500 transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
+            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
               class="h-4 w-4 sm:h-5 sm:w-5">
               <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"></path>
@@ -82,7 +82,7 @@
             </svg>
           </span>
           <span data-tooltip-target="wifi"
-            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark-500 transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
+            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
               class="h-4 w-4 sm:h-5 sm:w-5">
               <path fill-rule="evenodd"
@@ -91,7 +91,7 @@
             </svg>
           </span>
           <span data-tooltip-target="bedrooms"
-            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark-500 transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
+            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
               class="h-4 w-4 sm:h-5 sm:w-5">
               <path
@@ -103,7 +103,7 @@
             </svg>
           </span>
           <span data-tooltip-target="tv"
-            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark-500 transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
+            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
               class="h-4 w-4 sm:h-5 sm:w-5">
               <path d="M19.5 6h-15v9h15V6z"></path>
@@ -113,7 +113,7 @@
             </svg>
           </span>
           <span data-tooltip-target="fire"
-            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark-500 transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
+            class="cursor-pointer rounded-full border border-patten-blue bg-white p-2 sm:p-3 text-primary-dark transition-colors hover:border-primary-500/10 hover:bg-primary-500/10 hover:!opacity-100 group-hover:opacity-70">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
               class="h-4 w-4 sm:h-5 sm:w-5">
               <path fill-rule="evenodd"
@@ -149,7 +149,7 @@
         class="inline-block align-bottom bg-white rounded-lg border-2 border-primary-dark text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full max-w-[95%] sm:max-w-lg">
         <div class="leading-normal font-poppins bg-white px-3 pt-4 pb-3 sm:p-6 sm:pb-4">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-2xl leading-6 font-semibold text-primary-dark" id="modal-title">
+            <h3 class="text-2xl leading-6 font-semibold text-primary" id="modal-title">
               {{ $modalContent['event_name'] }}
             </h3>
             <button type="button" class="text-gray-400 transition-colors duration-200 hover:text-gray-500"
