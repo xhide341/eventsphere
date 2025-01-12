@@ -2,10 +2,10 @@
     <!-- Page Header -->
     <x-slot name="header">
         <div class="ml-1 rounded-lg flex flex-row flex-wrap items-center w-full">
-            <nav class="bg-transparent antialiased text-primary">
+            <nav class="bg-transparent antialiased text-primary-dark">
                 <ol class="flex flex-wrap mr-8 bg-transparent items-center">
                     <li class="text-sm breadcrumb-item align-middle">
-                        <x-heroicon-s-home class="w-5 h-5 text-primary" />
+                        <x-heroicon-s-home class="w-5 h-5 text-primary-dark" />
                     </li>
                     <li class="text-sm capitalize leading-normal flex items-center">
                         <x-heroicon-s-chevron-right class="w-4 h-4 text-gray-600 mx-2" />

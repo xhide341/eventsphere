@@ -95,22 +95,6 @@ class EventCard extends Component
         }
     }
 
-    public function toggleRegistration()
-    {
-        if (!Auth::check()) {
-            return;
-        }
-
-        if ($this->isUserRegistered()) {
-            $this->event->users()->detach(Auth::user()->id);
-        } else {
-            $this->event->users()->attach(Auth::user()->id, ['registration_date' => now()]);
-        }
-
-        $this->event->refresh();
-        $this->dispatch('eventUpdated');
-    }
-
     public function getSchedule()
     {
         try {
