@@ -59,7 +59,7 @@
           </p>
         </div>
         <div class="min-h-10">
-          <p class="line-clamp-2 2xl:line-clamp-3 text-pretty text-xs 2xl:text-sm font-light text-gray-700">
+          <p class="line-clamp-2 2xl:line-clamp-3 text-pretty text-xs 2xl:text-sm font-normal text-gray-700 p-0">
             {{ $modalContent['description'] }}
           </p>
         </div>
@@ -125,8 +125,8 @@
       </div>
       <div class="p-6 pt-3">
         <button @click="showModal = true; imageLoaded = false; modalImageLoaded = false;"
-          class="w-full block relative overflow-hidden rounded-lg bg-primary hover:bg-primary-light py-3.5 px-7 text-center text-sm font-semibold uppercase text-white transition-all duration-500 ease-out wave-effect">
-          <span class="relative z-10">View Details</span>
+          class="w-full block relative overflow-hidden rounded-md bg-primary hover:bg-primary-light py-3 px-7 text-center text-sm font-semibold text-white transition-all duration-500 ease-out wave-effect">
+          <span class="relative z-10">View</span>
         </button>
       </div>
     </div>
@@ -145,10 +145,7 @@
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
       <!-- Modal content -->
-      <div x-show="showModal" x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="opacity-0 scale-95"
+      <div x-show="showModal"
         class="inline-block align-bottom bg-white rounded-lg border-2 border-primary-dark text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full max-w-[95%] sm:max-w-lg">
         <div class="leading-normal font-poppins bg-white px-3 pt-4 pb-3 sm:p-6 sm:pb-4">
           <div class="flex justify-between items-center mb-4">
@@ -201,8 +198,9 @@
             <div class="mt-4">
               <h5 class="text-xl font-semibold text-primary-dark mb-3">Event Details</h5>
               <div class="bg-gray-100 rounded-lg p-4 shadow-sm">
-                <p class="text-xs sm:text-sm text-primary-dark font-normal mb-4">{{ $modalContent['description'] }}</p>
-
+                <p class="text-xs sm:text-sm text-primary-dark font-normal mb-4 text-wrap p-0">
+                  {{ $modalContent['description'] }}
+                </p>
                 <div class="flex justify-between">
                   <div class="grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2 w-full">
                     <div class="flex items-center space-x-3">
@@ -300,34 +298,10 @@
           </div>
         </div>
         <div class="bg-gray-50 px-3 py-3 sm:px-6 sm:flex sm:flex-row-reverse space-y-2 sm:space-y-0">
-          <a href="{{ $modalContent['is_user_registered'] ? route('event.details', $modalContent['event_id']) : '#' }}"
-            class="w-full inline-flex justify-center border border-transparent rounded-md shadow-sm px-4 py-2.5 {{ $modalContent['is_user_registered'] ? 'bg-primary text-custom-white hover:bg-primary-light' : 'bg-gray-100 text-gray-400 cursor-not-allowed' }} focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            {{ !$modalContent['is_user_registered'] ? 'disabled' : '' }}
-            title="{{ !$modalContent['is_user_registered'] ? 'Please register for the event to submit feedback' : 'Submit your feedback' }}">
-            Submit Feedback
+          <a href="{{ route('event.details', $modalContent['event_id']) }}"
+            class="w-full inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2.5 text-base font-medium text-white bg-primary hover:bg-primary-light focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
+            View Full Detail
           </a>
-
-          @if(!$modalContent['is_user_registered'] && !$modalContent['event_completed'])
-        <button type="button" wire:click="toggleRegistration" wire:loading.attr="disabled"
-        wire:target="toggleRegistration" wire:loading.class="opacity-50 cursor-not-allowed" class="w-full inline-flex justify-center items-center 
-      rounded-md border border-transparent shadow-sm 
-      px-4 py-2.5 text-base font-medium text-white
-      bg-primary hover:bg-primary-light 
-      focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
-        <span wire:loading.remove wire:target="toggleRegistration">
-          Register
-        </span>
-
-        <span wire:loading wire:target="toggleRegistration">
-          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-          viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-          <path class="opacity-75" fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-          </svg>
-        </span>
-        </button>
-      @endif
         </div>
       </div>
     </div>
