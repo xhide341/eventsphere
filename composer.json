@@ -16,7 +16,6 @@
         "league/flysystem-aws-s3-v3": "3.0",
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.6",
-        "mckenziearts/laravel-notify": "^2.5",
         "symfony/http-client": "^7.2",
         "symfony/postmark-mailer": "^7.2"
     },

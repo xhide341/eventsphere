@@ -19,7 +19,6 @@
 
     <!-- Add Livewire Styles -->
     @livewireStyles
-    @notifyCss
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -46,8 +45,6 @@
         </main>
     </div>
 
-    @include('notify::components.notify')
-    @notifyJs
     @livewireScripts
 </body>
 
