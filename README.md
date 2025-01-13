@@ -1,4 +1,3 @@
-
 # EventSphere 🌎
 
 [Insert Banner Image Here]
@@ -9,13 +8,13 @@
 
 ## ✨ Features
 
-- **📅 Event Management**: Simplify event creation and tracking.
-- **🏛️ Venue Booking System**: Manage venue availability and bookings.
-- **👥 Speaker Management**: Assign and organize event speakers.
-- **📊 Real-time Analytics Dashboard**: Visualize event metrics and feedback.
-- **👤 User Registration & Authentication**: Secure and flexible user management.
-- **⭐ Event Feedback System**: Collect and analyze attendee feedback.
-- **📱 Responsive Design**: Optimized for all devices.
+-   **📅 Event Management**: Simplify event creation and tracking.
+-   **🏛️ Venue Booking System**: Manage venue availability and bookings.
+-   **👥 Speaker Management**: Assign and organize event speakers.
+-   **📊 Real-time Analytics Dashboard**: Visualize event metrics and feedback.
+-   **👤 User Registration & Authentication**: Secure and flexible user management.
+-   **⭐ Event Feedback System**: Collect and analyze attendee feedback.
+-   **📱 Responsive Design**: Optimized for all devices.
 
 [Insert Features Screenshot Grid Here]
 
@@ -40,20 +39,23 @@ EventSphere is powered by the TALL stack and modern DevOps tools:
 ## 🎯 Core Modules
 
 ### 📅 Event Management
-- Create and manage events with ease.
-- Track attendance and handle registrations.
-- Set and monitor event capacity limits.
+
+-   Create and manage events with ease.
+-   Track attendance and handle registrations.
+-   Set and monitor event capacity limits.
 
 ### 🏛️ Venue Management
-- Book and manage venues.
-- Check real-time availability.
-- View detailed venue information, including images.
-- Track venue usage and capacity.
+
+-   Book and manage venues.
+-   Check real-time availability.
+-   View detailed venue information, including images.
+-   Track venue usage and capacity.
 
 ### 👤 User System
-- Flexible user registration and authentication.
-- Role-based access control (RBAC).
-- Manage user profiles and event history.
+
+-   Flexible user registration and authentication.
+-   Role-based access control (RBAC).
+-   Manage user profiles and event history.
 
 ---
 
@@ -66,7 +68,9 @@ EventSphere is powered by the TALL stack and modern DevOps tools:
 ## 🛠️ Installation
 
 ### Prerequisites (for local installation)
+
 Ensure you have the following installed:
+
 ```bash
 - PHP 8.1+
 - Composer
@@ -117,16 +121,16 @@ sail npm run dev
 
 ## 🔗 Additional Resources
 
-- [Laravel Documentation](https://laravel.com/docs)
-- [Livewire Documentation](https://laravel-livewire.com/docs/installation)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Filament PHP](https://filamentphp.com/docs)
-- [Docker Documentation](https://www.docker.com/docs)
+-   [Laravel Documentation](https://laravel.com/docs)
+-   [Livewire Documentation](https://laravel-livewire.com/docs/installation)
+-   [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+-   [Filament PHP](https://filamentphp.com/docs)
+-   [Docker Documentation](https://www.docker.com/docs)
 
 ---
 
 ## 🧑‍💻 Author
 
 Developed by:
-- [xhide341](https://github.com/xhide341)
 
+-   [xhide341](https://github.com/xhide341)

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Pages\Page;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\LatestEvents;
 use App\Filament\Widgets\PopularVenues;
@@ -10,8 +10,10 @@ use App\Filament\Widgets\EventAttendanceChart;
 use App\Filament\Widgets\DepartmentEventsChart;
 use App\Filament\Widgets\TopSpeakers;
 
-class Dashboard extends BaseDashboard
+class Dashboard extends \Filament\Pages\Dashboard
 {
+    public static ?string $navigationIcon = 'heroicon-o-home';
+
     public function getHeaderWidgets(): array
     {
         return [
@@ -21,7 +23,7 @@ class Dashboard extends BaseDashboard
 
     public function getWidgets(): array
     {
-        return [            
+        return [
             DepartmentEventsChart::class,
             EventAttendanceChart::class,
             LatestEvents::class,
