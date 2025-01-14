@@ -2,7 +2,7 @@ services:
     laravel.test:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.local
         # image: dunglas/frankenphp
         working_dir: /var/www/html
         extra_hosts:
