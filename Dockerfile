@@ -8,6 +8,12 @@ RUN apt-get update && apt-get install -y curl
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:${PORT}/health || exit 1
 
+# Create sail user
+ARG WWWGROUP=1000
+ARG WWWUSER=1000
+RUN groupadd --force -g ${WWWGROUP} sail && \
+    useradd -ms /bin/bash --no-user-group -g ${WWWGROUP} -u ${WWWUSER} sail
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -20,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install required PHP extensions quietly
+# Install required PHP extensions
 RUN MAKE="make -j$(nproc) -s" \
     install-php-extensions \
     pcntl \
@@ -34,29 +40,23 @@ RUN MAKE="make -j$(nproc) -s" \
 
 WORKDIR /var/www/html
 
-# Copy entire application first
+# Copy entire application and deploy script
 COPY . .
-
-# Install dependencies with specific settings
-RUN composer install --no-dev --optimize-autoloader --no-interaction \
-    --no-plugins --no-scripts
-
-# Run post-install scripts manually
-RUN php artisan package:discover --ansi \
-    && php artisan vendor:publish --all
-
-# Install Node.js dependencies and build assets
-RUN npm install && npm run build
-
-# Set permissions for FrankenPHP and application
-RUN chmod +x /usr/local/bin/frankenphp && \
-    chown -R www-data:www-data .
-
-# Use www-data user
-USER www-data
-
-# Copy and set up deploy script
 COPY deploy.sh ./deploy.sh
-RUN chmod +x ./deploy.sh
+
+# Install dependencies and build
+RUN composer install --no-dev --optimize-autoloader --no-interaction \
+    --no-plugins --no-scripts && \
+    php artisan package:discover --ansi && \
+    php artisan vendor:publish --all && \
+    npm install && npm run build
+
+# Set all permissions before switching user
+RUN chmod +x /usr/local/bin/frankenphp && \
+    chmod +x ./deploy.sh && \
+    chown -R sail:sail .
+
+# Switch to sail user
+USER sail
 
 CMD ["./deploy.sh"]
