@@ -1,58 +1,72 @@
 <?php
 
-use App\Livewire\Actions\Logout;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Auth\Notifications\VerifyEmail as DefaultVerifyEmail;
+use App\Notifications\PendingUserNotifiable;
 
 new #[Layout('layouts.guest')] class extends Component
 {
-    /**
-     * Send an email verification notification to the user.
-     */
-    public function sendVerification(): void
+    public function mount()
     {
-        if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('events', absolute: false), navigate: true);
+        // Check both regular and flashed session data
+        if (!Session::has('pending_user') && !Session::has('_pending_user')) {
+            return redirect()->route('register');
+        }
 
+        // Restore from flash if needed
+        if (!Session::has('pending_user') && Session::has('_pending_user')) {
+            Session::put('pending_user', Session::get('_pending_user'));
+        }
+
+        Session::save();
+    }
+
+    public function resendVerification(): void
+    {
+        $pendingUser = Session::get('pending_user');
+        
+        if (!$pendingUser) {
             return;
         }
 
-        Auth::user()->sendEmailVerificationNotification();
+        // Create temporary notifiable object
+        $notifiable = new PendingUserNotifiable($pendingUser['id'], $pendingUser['email']);
+
+        // Send verification using Laravel's default notification
+        Notification::send($notifiable, new DefaultVerifyEmail);
 
         Session::flash('status', 'verification-link-sent');
     }
-
-    /**
-     * Log the current user out of the application.
-     */
-    public function logout(Logout $logout): void
-    {
-        $logout();
-
-        $this->redirect('/', navigate: true);
-    }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
-
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+    <div class="space-y-6">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
+            <p class="text-sm text-gray-600">
+                Thanks for signing up! Before getting started, please verify your email address by clicking the link we just sent to <span class="font-medium text-primary">{{ Session::get('pending_user.email', 'your email address') }}</span>.
+            </p>
         </div>
-    @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <x-primary-button wire:click="sendVerification">
-            {{ __('Resend Verification Email') }}
-        </x-primary-button>
+        @if (session('status') == 'verification-link-sent')
+            <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                <p class="text-sm text-green-700">
+                    A new verification link has been sent to your email address.
+                </p>
+            </div>
+        @endif
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {{ __('Log Out') }}
-        </button>
+        <div class="flex items-center justify-between">
+            <button wire:click="resendVerification" type="button" class="btn-primary">
+                Resend Verification Email
+            </button>
+
+            <a href="{{ route('register') }}" class="text-sm text-gray-600 hover:text-gray-900 underline">
+                Start Over
+            </a>
+        </div>
     </div>
 </div>

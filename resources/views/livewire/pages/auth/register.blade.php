@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmail;
+use Illuminate\Auth\Notifications\VerifyEmail as DefaultVerifyEmail;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\PendingUserNotifiable;
 
 new #[Layout('layouts.guest')] class extends Component
 {
@@ -16,7 +23,7 @@ new #[Layout('layouts.guest')] class extends Component
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
-    public string $role = 'student'; // Default role
+    public string $role = 'user'; // Default role
 
     /**
      * Handle an incoming registration request.
@@ -27,18 +34,33 @@ new #[Layout('layouts.guest')] class extends Component
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'in:student,organizer'],
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
+        $tempId = md5(uniqid());
+        
+        $pendingUser = [
+            'id' => $tempId,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => $this->role
+        ];
 
-        $user = User::create($validated);
+        // Store in session
+        Session::put('pending_user', $pendingUser);
+        // Also flash for redirect
+        Session::flash('_pending_user', $pendingUser);
 
-        event(new Registered($user));
+        // Create notifiable object
+        $notifiable = new PendingUserNotifiable($tempId, $validated['email']);
 
-        Auth::login($user);
+        // Send verification
+        Notification::send($notifiable, new DefaultVerifyEmail);
 
-        $this->redirect(route('verification.notice', absolute: false), navigate: true);
+        // Force save session before redirect
+        Session::save();
+
+        $this->redirect(route('verification.notice'), navigate: true);
     }
 }; ?>
 
