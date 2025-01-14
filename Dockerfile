@@ -3,9 +3,9 @@ FROM dunglas/frankenphp:1.4.0-php8.2
 # Just expose the port, let environment set it
 EXPOSE 10000
 
-# Add health check
+# Add health check with longer start period
 RUN apt-get update && apt-get install -y curl
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
     CMD curl -f http://localhost:${PORT}/health || exit 1
 
 # Create sail user
