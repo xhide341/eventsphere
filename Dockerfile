@@ -1,5 +1,4 @@
-FROM dunglas/frankenphp
-
+FROM dunglas/frankenphp:1.4.0
 
 ENV PORT=10000
 EXPOSE ${PORT}
@@ -51,14 +50,13 @@ RUN npm install && npm run build
 
 # Set permissions for FrankenPHP and application
 RUN chmod +x /usr/local/bin/frankenphp && \
-    chown -R www-data:www-data . && \
-    chown www-data:www-data /usr/local/bin/frankenphp
+    chown -R www-data:www-data .
 
 # Use www-data user
 USER www-data
 
 # Copy and set up deploy script
-COPY deploy.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/deploy.sh
+COPY deploy.sh ./deploy.sh
+RUN chmod +x ./deploy.sh
 
-CMD ["/usr/local/bin/deploy.sh"]
+CMD ["./deploy.sh"]
