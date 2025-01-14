@@ -11,6 +11,9 @@ done
 echo "Rebuilding route cache..."
 php artisan route:clear
 php artisan route:cache || true  # Continue even if route caching fails
+php artisan config:cache
+php artisan view:cache
+php artisan optimize
 
 # Run migrations
 echo "Running database migrations..."

@@ -35,10 +35,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
 
 # Run post-install scripts manually
 RUN php artisan package:discover --ansi \
-    && php artisan vendor:publish --all \
-    && php artisan config:cache \
-    && php artisan view:cache \
-    && php artisan optimize
+    && php artisan vendor:publish --all
 
 # Install Node.js dependencies and build assets
 RUN npm install && npm run build
