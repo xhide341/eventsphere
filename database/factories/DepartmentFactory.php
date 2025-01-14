@@ -20,7 +20,7 @@ class DepartmentFactory extends Factory
      */
     public function definition(): array
     {
-        static $names = ['CITE', 'CBEA', 'CITHM', 'BED', 'SDS', 'CAMP'];
+        static $names = ['CITE', 'CBEA', 'CITHM', 'BED', 'SDS', 'CAMP', 'CASE'];
 
         // Shift the first element off the array and return it
         $name = array_shift($names);

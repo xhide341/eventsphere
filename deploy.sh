@@ -7,6 +7,11 @@ until php artisan db:monitor --check=connection; do
     sleep 2
 done
 
+# Clear and rebuild route cache
+echo "Rebuilding route cache..."
+php artisan route:clear
+php artisan route:cache || true  # Continue even if route caching fails
+
 # Run migrations
 echo "Running database migrations..."
 php artisan migrate --force
