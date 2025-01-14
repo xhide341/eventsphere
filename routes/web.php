@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 Route::view('/', 'livewire.pages.welcome')->name('welcome');
@@ -40,6 +41,18 @@ Route::get('/settings', SettingsPage::class)
 Route::get('/events/{event}', EventDetailsPage::class)
     ->middleware(['auth', 'verified'])
     ->name('event.details');
+
+Route::get('/health', function () {
+    try {
+        // Check database
+        DB::connection()->getPdo();
+
+        // Basic application health
+        return response('OK', 200);
+    } catch (\Exception $e) {
+        return response('Error', 500);
+    }
+})->name('health');
 
 // Google Auth
 Route::middleware('guest')->group(function () {
