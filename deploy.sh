@@ -2,7 +2,7 @@
 
 # Wait for database
 echo "Waiting for database connection..."
-until php artisan db:monitor --check=connection; do
+until php artisan tinker --execute="DB::connection()->getPdo();" > /dev/null 2>&1; do
     echo "Database connection not ready. Waiting..."
     sleep 2
 done
@@ -18,4 +18,4 @@ echo "Running database migrations..."
 php artisan migrate --force
 
 # Start FrankenPHP
-exec php artisan octane:frankenphp --host=0.0.0.0 --port=80 
+exec php artisan octane:frankenphp --host=0.0.0.0 --port=${PORT:-80}

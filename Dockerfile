@@ -1,5 +1,8 @@
 FROM dunglas/frankenphp
 
+ENV PORT=10000
+EXPOSE ${PORT}
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
