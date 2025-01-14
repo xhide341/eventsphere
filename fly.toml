@@ -1,0 +1,61 @@
+# App name and region
+app = "eventsphere"
+primary_region = "sin"  # Singapore region
+
+[build]
+  [build.args]
+    NODE_VERSION = "18"
+    PHP_VERSION = "8.2"
+
+[env]
+  APP_ENV = "production"
+  APP_DEBUG = "false"
+  LOG_CHANNEL = "stderr"
+  LOG_LEVEL = "info"
+  DB_CONNECTION = "mysql"
+  CACHE_DRIVER = "redis"
+  QUEUE_CONNECTION = "redis"
+  SESSION_DRIVER = "redis"
+  REDIS_HOST = "eventsphere-redis.internal"
+  SSL_MODE = "preferred"
+  XDG_CONFIG_HOME = "/var/www/html/config"
+  XDG_DATA_HOME = "/var/www/html/data"
+
+# Web Process
+[[services]]
+  protocol = "tcp"
+  internal_port = 80
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  # Define processes
+  [[services.processes]]
+    name = "app"
+    cmd = "php /var/www/html/artisan serve"
+
+  [[services.processes]]
+    name = "worker"
+    cmd = "php /var/www/html/artisan queue:work"
+    auto_start = true
+    auto_stop = false
+
+[mounts]
+  source = "storage_vol"
+  destination = "/var/www/html/storage"
+  source = "frankenphp-ssl"
+  destination = "/etc/frankenphp/ssl"
