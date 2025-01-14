@@ -1,5 +1,6 @@
 FROM dunglas/frankenphp
 
+
 ENV PORT=10000
 EXPOSE ${PORT}
 
@@ -48,12 +49,16 @@ RUN php artisan package:discover --ansi \
 # Install Node.js dependencies and build assets
 RUN npm install && npm run build
 
-# Set permissions
-RUN chown -R www-data:www-data .
+# Set permissions for FrankenPHP and application
+RUN chmod +x /usr/local/bin/frankenphp && \
+    chown -R www-data:www-data . && \
+    chown www-data:www-data /usr/local/bin/frankenphp
+
+# Use www-data user
+USER www-data
 
 # Copy and set up deploy script
 COPY deploy.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/deploy.sh
 
-# Use deploy script as entrypoint
 CMD ["/usr/local/bin/deploy.sh"]
