@@ -6,7 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'eventsphere') }} | {{ ucfirst(Route::currentRouteName()) }}</title>
+    <title>
+        {{ config('app.name', 'eventsphere') }} |
+        @php
+            $routeName = Route::currentRouteName();
+            $formattedName = str_replace('.', ' ', $routeName);
+            $formattedName = ucwords($formattedName);
+        @endphp
+        {{ $formattedName }}
+    </title>
     <link rel="icon" href="{{ Vite::asset('resources/images/LCUP.ico') }}" type="image/x-icon" sizes="16x16">
 
     <!-- Add Livewire Styles -->
