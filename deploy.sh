@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Debug port
+echo "Using PORT: ${PORT}"
+
 # Wait for database
 echo "Waiting for database connection..."
 until php artisan tinker --execute="DB::connection()->getPdo();" > /dev/null 2>&1; do
@@ -17,5 +20,5 @@ php artisan route:cache
 echo "Running database migrations..."
 php artisan migrate --force
 
-# Start FrankenPHP with explicit port
-exec php artisan octane:frankenphp --host=0.0.0.0 --port=10000
+# Start FrankenPHP using environment PORT
+exec php artisan octane:frankenphp --host=0.0.0.0 --port=${PORT:-10000}

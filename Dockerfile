@@ -1,7 +1,6 @@
-FROM dunglas/frankenphp:1.4.0
+FROM dunglas/frankenphp:1.4.0-php8.2
 
-# Make port explicit
-ENV PORT=10000
+# Just expose the port, let environment set it
 EXPOSE 10000
 
 # Add health check
