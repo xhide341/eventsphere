@@ -1,7 +1,8 @@
 FROM dunglas/frankenphp:1.4.0
 
+# Make port explicit
 ENV PORT=10000
-EXPOSE ${PORT}
+EXPOSE 10000
 
 # Add health check
 RUN apt-get update && apt-get install -y curl
