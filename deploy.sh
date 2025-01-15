@@ -5,14 +5,22 @@ echo "Starting deployment process..."
 echo "PHP Version: $(php -v)"
 echo "Using PORT: ${PORT}"
 
-# 2. Added database timeout
+# 2. Add database configuration debug
+echo "Database configuration:"
+echo "DB_CONNECTION: ${DB_CONNECTION}"
+echo "DB_HOST: ${DB_HOST}"
+echo "DB_PORT: ${DB_PORT}"
+echo "DB_DATABASE: ${DB_DATABASE}"
+echo "DB_USERNAME: ${DB_USERNAME}"
+echo "Testing connection..."
+
+# 3. Database connection check with debug
 TIMEOUT=300
 START_TIME=$(date +%s)
-until php artisan tinker --execute="DB::connection()->getPdo();" > /dev/null 2>&1; do
+until php artisan tinker --execute="try { DB::connection()->getPdo(); echo 'Connection successful!'; } catch (\Exception \$e) { echo 'Connection failed: ' . \$e->getMessage(); }" 2>&1; do
     CURRENT_TIME=$(date +%s)
     ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
     
-    # Check timeout
     if [ $ELAPSED_TIME -gt $TIMEOUT ]; then
         echo "Database connection timeout after ${TIMEOUT} seconds"
         exit 1
@@ -22,7 +30,7 @@ until php artisan tinker --execute="DB::connection()->getPdo();" > /dev/null 2>&
     sleep 5
 done
 
-# 3. Added migration timeout
+# 4. Added migration timeout
 timeout 300 php artisan migrate --force
 
 # Clear and rebuild route cache
