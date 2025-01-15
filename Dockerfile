@@ -51,9 +51,15 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
     php artisan vendor:publish --all && \
     npm install && npm run build
 
-# Set all permissions before switching user
-RUN chmod +x /usr/local/bin/frankenphp && \
+# Set broad permissions for sail user
+RUN mkdir -p /config && \
+    chmod -R 777 /config && \
+    chmod -R 777 /var/www/html && \
+    chmod -R 777 /tmp && \
+    chmod +x /usr/local/bin/frankenphp && \
     chmod +x ./deploy.sh && \
+    chown -R sail:sail /config && \
+    chown -R sail:sail /var/www/html && \
     chown -R sail:sail .
 
 # Switch to sail user
