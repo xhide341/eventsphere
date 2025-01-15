@@ -30,8 +30,8 @@ until php artisan tinker --execute="try { DB::connection()->getPdo(); echo 'Conn
     sleep 5
 done
 
-# 4. Added migration timeout
-timeout 300 php artisan migrate --force
+# 4. Added migration timeout with ignore duplicates
+timeout 300 php artisan migrate --force --ignore-duplicate-migrations
 
 # Clear and rebuild route cache
 echo "Caching config..."
