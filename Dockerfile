@@ -30,7 +30,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN MAKE="make -j$(nproc) -s" \
     install-php-extensions \
     pcntl \
-    pdo_mysql \
+    pgsql \
     pdo_pgsql \
     redis \
     intl \
