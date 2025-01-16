@@ -96,6 +96,8 @@ return [
             'search_path' => 'public',
             'sslmode' => 'require',
             'schema' => 'public',
+            'connect_via_database' => env('DB_DATABASE_VIA'),
+            'connect_via_port' => env('DB_PORT_VIA'),
         ],
 
         'sqlsrv' => [
