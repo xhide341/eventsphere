@@ -134,6 +134,11 @@ class EventDetailsPage extends Component
         ]);
     }
 
+    public function closeModal()
+    {
+        $this->showConfirmationModal = false;
+    }
+
     public function handleRegistration()
     {
         \Log::info('Handle Registration called');

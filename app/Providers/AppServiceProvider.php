@@ -24,6 +24,6 @@ class AppServiceProvider extends ServiceProvider
             $url->forceScheme('https');
         }
         // Disable lazy loading
-        \Illuminate\Database\Eloquent\Model::preventLazyLoading(!app()->isProduction());
+        // \Illuminate\Database\Eloquent\Model::preventLazyLoading(!app()->isProduction());
     }
 }
