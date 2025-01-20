@@ -4,7 +4,7 @@ FROM dunglas/frankenphp:1.4.1-php8.2.27-bookworm
 EXPOSE 10000
 
 # Add health check with longer start period
-# RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
     CMD curl -f http://localhost:${PORT}/health || exit 1
 
@@ -27,16 +27,16 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install required PHP extensions
-# RUN MAKE="make -j$(nproc) -s" \
-#     install-php-extensions \
-#     pcntl \
-#     pgsql \
-#     pdo_pgsql \
-#     redis \
-#     intl \
-#     gd \
-#     bcmath \
-#     zip
+RUN MAKE="make -j$(nproc) -s" \
+    install-php-extensions \
+    pcntl \
+    pgsql \
+    pdo_pgsql \
+    redis \
+    intl \
+    gd \
+    bcmath \
+    zip
 
 WORKDIR /var/www/html
 
