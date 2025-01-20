@@ -60,8 +60,11 @@ RUN mkdir -p /config && \
     chmod -R 777 /tmp && \
     chmod +x /usr/local/bin/frankenphp && \
     chmod +x ./deploy.sh && \
+    chmod -R 777 /var/log/supervisor && \
+    chmod -R 777 /var/run && \
     chown -R sail:sail /config && \
     chown -R sail:sail /var/www/html && \
+    chown -R sail:sail /var/log/supervisor && \
     chown -R sail:sail .
 
 # Add supervisor config
