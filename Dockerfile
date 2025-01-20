@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:1.4.1-php8.2.27-bookworm
+FROM dunglas/frankenphp:1-php8.2
 
 # Just expose the port, let environment set it
 EXPOSE 10000
