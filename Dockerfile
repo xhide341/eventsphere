@@ -1,12 +1,4 @@
-FROM dunglas/frankenphp:1.4.0
-
-ENV PORT=10000
-EXPOSE ${PORT}
-
-# Add health check
-RUN apt-get update && apt-get install -y curl
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:${PORT}/health || exit 1
+FROM shinsenter/frankenphp:latest
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
@@ -15,7 +7,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /var/www/html
 
-# Copy composer files first to leverage Docker cache
+# Copy composer files first to leverage layer caching
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
@@ -26,18 +18,23 @@ COPY . .
 COPY deploy.sh ./deploy.sh
 RUN chmod +x ./deploy.sh
 
+# Copy supervisor configuration (before switching user)
+COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+
 # Set permissions
 RUN chmod +x /usr/local/bin/frankenphp && \
     chown -R www-data:www-data .
 
+# Install Octane
+RUN composer require laravel/octane && \
+    php artisan octane:install --server=frankenphp
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost/up || exit 1
+
+# Switch to non-root user for security
 USER www-data
 
-# Install Octane
-RUN echo "Installing Laravel Octane..." \
-    && composer require laravel/octane \
-    && php artisan octane:install --server=frankenphp
-
-# Copy supervisor configuration
-COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
-
-CMD ["./deploy.sh"]
+# Use supervisor to manage processes
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
