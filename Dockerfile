@@ -1,4 +1,4 @@
-FROM shinsenter/php:8.2-fpm-nginx
+FROM dunglas/frankenphp:1.4.1-php8.2.27-bookworm
 
 # Just expose the port, let environment set it
 EXPOSE 10000
