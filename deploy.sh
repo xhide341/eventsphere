@@ -12,9 +12,18 @@ echo "DB_HOST: ${DB_HOST}"
 echo "DB_PORT: ${DB_PORT}"
 echo "DB_DATABASE: ${DB_DATABASE}"
 echo "DB_USERNAME: ${DB_USERNAME}"
-echo "Testing connection..."
 
-# 4. Added migration timeout with ignore duplicates
+# 3. Test database connection
+echo "Testing database connection..."
+if php artisan db:monitor; then
+    echo "Database connection successful!"
+else
+    echo "Database connection failed!"
+    exit 1
+fi
+
+# 4. Run migrations
+echo "Running migrations..."
 php artisan migrate --force --graceful
 
 # Clear and rebuild route cache
