@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
     supervisor \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /var/www/html
 
 # Copy application files first (we need artisan)
 COPY . .
