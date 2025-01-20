@@ -48,7 +48,9 @@ COPY deploy.sh ./deploy.sh
 RUN composer install --no-dev --optimize-autoloader --no-interaction \
     --no-plugins --no-scripts && \
     php artisan package:discover --ansi && \
-    php artisan vendor:publish --all && \
+    php artisan vendor:publish --tag=filament-config && \
+    php artisan vendor:publish --tag=filament-translations && \
+    php artisan vendor:publish --tag=filament-assets && \
     npm install && npm run build
 
 # Set broad permissions for sail user
