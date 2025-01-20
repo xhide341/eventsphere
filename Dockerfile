@@ -47,6 +47,7 @@ COPY deploy.sh ./deploy.sh
 # Install dependencies and build
 RUN composer install --no-dev --optimize-autoloader --no-interaction \
     --no-plugins --no-scripts && \
+    php artisan octane:install --server=frankenphp && \
     php artisan package:discover --ansi && \
     php artisan vendor:publish --tag=filament-config && \
     php artisan vendor:publish --tag=filament-translations && \
@@ -70,8 +71,11 @@ RUN mkdir -p /config && \
 # Add supervisor config
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-# Make sure supervisor directory exists
-RUN mkdir -p /var/log/supervisor
+# Make sure supervisor and storage directories exist and are writable
+RUN mkdir -p /var/log/supervisor && \
+    mkdir -p storage/framework/{sessions,views,cache} && \
+    chmod -R 777 storage && \
+    chmod -R 777 bootstrap/cache
 
 # Switch to sail user
 USER sail
