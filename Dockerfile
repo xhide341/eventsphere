@@ -9,10 +9,6 @@ RUN apt-get update && apt-get install -y \
     supervisor \
     && rm -rf /var/lib/apt/lists/*
 
-# Enable PHP production settings
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-
 WORKDIR ${APP_PATH}
 
 # Copy application files
