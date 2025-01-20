@@ -13,12 +13,13 @@ echo "DB_PORT: ${DB_PORT}"
 echo "DB_DATABASE: ${DB_DATABASE}"
 echo "DB_USERNAME: ${DB_USERNAME}"
 
-# 3. Test database connection
+# 3. Test database connection with more verbose output
 echo "Testing database connection..."
-if php artisan db:monitor; then
-    echo "Database connection successful!"
+if php artisan db:monitor --verbose; then
+    echo "✅ Database connection successful!"
 else
-    echo "Database connection failed!"
+    echo "❌ Database connection failed with status $?"
+    php artisan db:show --verbose
     exit 1
 fi
 
