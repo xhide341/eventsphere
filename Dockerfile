@@ -1,20 +1,25 @@
 FROM shinsenter/frankenphp:latest
 
+ENV SERVER_NAME=https://eventsphere-eqyq.onrender.com
+ENV APP_PATH=/app
+ENV DOCUMENT_ROOT=/public
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     supervisor \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /var/www/html
+# Enable PHP production settings
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Copy application files first (we need artisan)
-COPY . .
+
+WORKDIR ${APP_PATH}
+
+# Copy application files
+COPY . ${APP_PATH}
 
 # Install composer dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Install Octane
-RUN composer require laravel/octane && \
+RUN composer install --no-dev --optimize-autoloader --no-interaction && \
     php artisan octane:install --server=frankenphp
 
 # Copy supervisor configuration
