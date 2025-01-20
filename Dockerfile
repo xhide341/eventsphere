@@ -1,4 +1,12 @@
-FROM dunglas/frankenphp:1.4.1-php8.2.27-bookworm
+FROM dunglas/frankenphp:1.4.0
+
+ENV PORT=10000
+EXPOSE ${PORT}
+
+# Add health check
+RUN apt-get update && apt-get install -y curl
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/health || exit 1
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
@@ -14,13 +22,15 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Copy application files
 COPY . .
 
+# Copy and setup deploy script
+COPY deploy.sh ./deploy.sh
+RUN chmod +x ./deploy.sh
+
 # Set permissions
-RUN mkdir -p /var/log/supervisor \
-    && mkdir -p storage/framework/{sessions,views,cache} \
-    && chmod -R 777 storage \
-    && chmod -R 777 bootstrap/cache \
-    && chmod +x /usr/local/bin/frankenphp \
-    && chmod +x deploy.sh
+RUN chmod +x /usr/local/bin/frankenphp && \
+    chown -R www-data:www-data .
+
+USER www-data
 
 # Install Octane
 RUN echo "Installing Laravel Octane..." \
@@ -30,8 +40,4 @@ RUN echo "Installing Laravel Octane..." \
 # Copy supervisor configuration
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-# Expose port
-EXPOSE ${PORT}
-
-# Start deployment script
 CMD ["./deploy.sh"]
