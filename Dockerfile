@@ -64,6 +64,12 @@ RUN mkdir -p /config && \
     chown -R sail:sail /var/www/html && \
     chown -R sail:sail .
 
+# Add supervisor config
+COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+
+# Make sure supervisor directory exists
+RUN mkdir -p /var/log/supervisor
+
 # Switch to sail user
 USER sail
 

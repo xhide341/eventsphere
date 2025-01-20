@@ -33,12 +33,5 @@ php artisan config:cache
 echo "Caching routes..."
 php artisan route:cache
 
-# 5. Start FrankenPHP with explicit port binding and longer timeout
-echo "Starting FrankenPHP on port ${PORT:-10000}..."
-exec php artisan octane:frankenphp \
-    --host=0.0.0.0 \
-    --port=${PORT:-10000} \
-    --max-requests=1000 \
-    --workers=2 \
-    --task-workers=1 \
-    --max-execution-time=30
+# Start supervisor (it will manage both FrankenPHP and queue workers)
+exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisor.conf
