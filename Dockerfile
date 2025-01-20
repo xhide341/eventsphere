@@ -28,8 +28,5 @@ RUN chown -R www-data:www-data .
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/up || exit 1
 
-# Switch to non-root user for security
-USER www-data
-
 # Use supervisor to manage processes
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
