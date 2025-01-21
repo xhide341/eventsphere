@@ -1,14 +1,10 @@
 FROM shinsenter/frankenphp:php8.3
 
 ENV SERVER_NAME=eventsphere-eqyq.onrender.com
-ENV ACME_SERVER=https://acme-staging-v02.api.letsencrypt.org/directory
 ENV APP_PATH=/app
 ENV DOCUMENT_ROOT=/public
 ENV SSL_CERT_PATH=/etc/ssl/site/server.crt
 ENV SSL_KEY_PATH=/etc/ssl/site/server.key
-
-# Add email for Let's Encrypt notifications
-ENV ACME_EMAIL=shawnehgn10@gmail.com
 
 # Create necessary directories for Caddy/ACME
 RUN mkdir -p /data/caddy/acme && \
