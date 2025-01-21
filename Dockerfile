@@ -1,5 +1,6 @@
 FROM shinsenter/frankenphp:latest
 
+ENV SERVER_NAME=eventsphere-eqyq.onrender.com
 ENV APP_PATH=/app
 ENV DOCUMENT_ROOT=/public
 ENV SSL_CERT_PATH=/etc/ssl/site/server.crt
