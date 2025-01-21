@@ -2,6 +2,8 @@ FROM shinsenter/frankenphp:latest
 
 ENV APP_PATH=/app
 ENV DOCUMENT_ROOT=/public
+ENV SSL_CERT_PATH=/etc/ssl/site/server.crt
+ENV SSL_KEY_PATH=/etc/ssl/site/server.key
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -24,7 +26,9 @@ COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 RUN chmod 755 /usr/local/bin/frankenphp && \
     chown root:root /usr/local/bin/frankenphp && \
     chmod -R 775 ${APP_PATH} && \
-    chown -R root:root ${APP_PATH}
+    chown -R root:root ${APP_PATH} && \
+    mkdir -p /etc/ssl/site && \
+    chmod 755 /etc/ssl/site
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
