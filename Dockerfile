@@ -1,6 +1,5 @@
 FROM shinsenter/frankenphp:latest
 
-ENV SERVER_NAME=https://eventsphere-eqyq.onrender.com
 ENV APP_PATH=/app
 ENV DOCUMENT_ROOT=/public
 
