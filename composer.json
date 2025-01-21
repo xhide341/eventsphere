@@ -5,7 +5,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "aws/aws-sdk-php": "^3.324",
         "filament/filament": "^3.2",
         "intervention/image-laravel": "^1.3",
