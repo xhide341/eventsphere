@@ -21,14 +21,20 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction && \
 # Copy supervisor configuration
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-# Set permissions
-RUN chown -R www-data:www-data . && \
-    chmod +x /usr/local/bin/frankenphp
+# Set permissions with more explicit commands
+RUN chmod 755 /usr/local/bin/frankenphp && \
+    chown root:root /usr/local/bin/frankenphp && \
+    chmod -R 775 ${APP_PATH} && \
+    chown -R root:root ${APP_PATH} && \
+    # Fix the cont-init.d script permissions
+    chmod 755 /etc/cont-init.d/zz-start-f8p
 
 # Debug commands
 RUN ls -la /usr/local/bin/frankenphp && \
+    ls -la /etc/cont-init.d/zz-start-f8p && \
     whoami && \
-    id
+    id && \
+    php -v
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
