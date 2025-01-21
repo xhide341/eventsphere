@@ -16,7 +16,7 @@ COPY . ${APP_PATH}
 
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction && \
-    php artisan octane:install --server=frankenphp
+    php artisan octane:install
 
 # Copy supervisor configuration
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
@@ -25,16 +25,7 @@ COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 RUN chmod 755 /usr/local/bin/frankenphp && \
     chown root:root /usr/local/bin/frankenphp && \
     chmod -R 775 ${APP_PATH} && \
-    chown -R root:root ${APP_PATH} && \
-    # Fix the cont-init.d script permissions
-    chmod 755 /etc/cont-init.d/zz-start-f8p
-
-# Debug commands
-RUN ls -la /usr/local/bin/frankenphp && \
-    ls -la /etc/cont-init.d/zz-start-f8p && \
-    whoami && \
-    id && \
-    php -v
+    chown -R root:root ${APP_PATH}
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
