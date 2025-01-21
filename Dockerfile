@@ -22,7 +22,16 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction && \
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
 # Set permissions
-RUN chown -R www-data:www-data .
+RUN chown -R www-data:www-data . && \
+    chmod +x /usr/local/bin/frankenphp
+
+# Debug commands
+RUN ls -la /usr/local/bin/frankenphp && \
+    whoami && \
+    id
+
+# Set permissions explicitly with maximum verbosity
+RUN chmod -v 755 /usr/local/bin/frankenphp
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
