@@ -3,6 +3,8 @@ FROM shinsenter/frankenphp:latest
 ENV SERVER_NAME=https://eventsphere-eqyq.onrender.com
 ENV APP_PATH=/app
 ENV DOCUMENT_ROOT=/public
+ENV SSL_CERT_PATH=/etc/ssl/certs/frankenphp.crt
+ENV SSL_KEY_PATH=/etc/ssl/private/frankenphp.key
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -26,6 +28,10 @@ RUN chmod 755 /usr/local/bin/frankenphp && \
     chown root:root /usr/local/bin/frankenphp && \
     chmod -R 775 ${APP_PATH} && \
     chown -R root:root ${APP_PATH}
+
+# Configure SSL for FrankenPHP
+RUN mkdir -p /etc/ssl/private && \
+    chmod 700 /etc/ssl/private
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
