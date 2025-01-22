@@ -44,7 +44,7 @@ class ViewEventAttendees extends Page implements HasTable
                     ->sortable(),
                 TextColumn::make('registration_date')
                     ->label('Registration Date')
-                    ->dateTime()
+                    ->dateTime('M d, Y g:i A')
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('registrations.registration_date', $direction);
                     }),
