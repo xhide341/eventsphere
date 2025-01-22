@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\Action;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ViewEventAttendees extends Page implements HasTable
 {
@@ -63,12 +64,31 @@ class ViewEventAttendees extends Page implements HasTable
             Action::make('print')
                 ->label('Print Attendees')
                 ->icon('heroicon-o-printer')
-                ->action(fn() => $this->printAttendees()),
-        ];
-    }
+                ->action(function () {
+                    try {
+                        $attendees = $this->event->users()
+                            ->select('users.*', 'registrations.registration_date')
+                            ->get();
 
-    protected function printAttendees(): void
-    {
-        // We'll implement the print functionality next
+                        $pdf = Pdf::setOptions([
+                            'isRemoteEnabled' => true,
+                            'chroot' => base_path('vendor/iamcal/php-emoji/lib')
+                        ])->loadView('filament.resources.event-resource.pdf.event-attendees', [
+                                    'event' => $this->event,
+                                    'attendees' => $attendees,
+                                ]);
+
+                        return response()->streamDownload(function () use ($pdf) {
+                            echo $pdf->stream();
+                        }, "event-{$this->event->id}-attendees.pdf");
+                    } catch (\Exception $e) {
+                        \Log::error('PDF Generation Error:', [
+                            'message' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+                        throw $e;
+                    }
+                }),
+        ];
     }
 }
