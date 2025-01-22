@@ -60,7 +60,8 @@ class Event extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'registrations')->withPivot('registration_date');
+        return $this->belongsToMany(User::class, 'registrations')
+            ->withPivot('registration_date');
     }
 
     public function speaker(): BelongsTo

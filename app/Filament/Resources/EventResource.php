@@ -243,6 +243,10 @@ class EventResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('viewAttendees')
+                    ->label('View Attendees')
+                    ->icon('heroicon-o-users')
+                    ->url(fn(Event $record): string => static::getUrl('attendees', ['record' => $record])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -257,6 +261,7 @@ class EventResource extends Resource
             'index' => Pages\ListEvents::route('/'),
             'create' => Pages\CreateEvent::route('/create'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
+            'attendees' => Pages\ViewEventAttendees::route('/{record}/attendees'),
         ];
     }
 
