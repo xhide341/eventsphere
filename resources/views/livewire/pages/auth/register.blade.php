@@ -25,6 +25,26 @@ new #[Layout('layouts.guest')] class extends Component
     public string $password_confirmation = '';
     public string $role = 'user'; // Default role
 
+    // Add real-time validation rules
+    public function rules()
+    {
+        return [
+            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-z\s]+$/'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password_confirmation' => ['required', 'string'],
+        ];
+    }
+
+    // Add method to validate single field
+    public function validateField($field)
+    {
+        // Only validate if the field has a value
+        if (!empty($this->{$field})) {
+            $this->validateOnly($field, $this->rules());
+        }
+    }
+
     /**
      * Handle an incoming registration request.
      */
@@ -70,9 +90,10 @@ new #[Layout('layouts.guest')] class extends Component
         <div class="lg:flex lg:space-x-4 lg:space-y-0 space-y-6">
             <!-- Name -->
             <div class="lg:w-1/2">
-                <x-input-label for="name" :value="__('Name')" />
+                <x-input-label for="name" :value="__('Name *')" />
                 <x-text-input 
-                    wire:model="name" 
+                    wire:model.blur="name" 
+                    wire:blur="validateField('name')"
                     id="name" 
                     class="block mt-1 w-full text-custom-black text-sm" 
                     type="text" 
@@ -80,65 +101,77 @@ new #[Layout('layouts.guest')] class extends Component
                     required 
                     autofocus 
                     autocomplete="name"
+                    minlength="2"
+                    maxlength="255"
                 />
-                <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                <x-input-error :messages="$errors->get('name')" class="mt-2 text-xs" />
             </div>
 
             <!-- Email Address -->
             <div class="lg:w-1/2">
-                <x-input-label for="email" :value="__('Email')" />
+                <x-input-label for="email" :value="__('Email *')" />
                 <x-text-input 
-                    wire:model="email" 
+                    wire:model.blur="email" 
+                    wire:blur="validateField('email')"
                     id="email" 
                     class="block mt-1 w-full text-custom-black text-sm" 
                     type="email" 
                     name="email" 
                     required 
-                    autocomplete="username"                
+                    autocomplete="username"
+                    minlength="3"
+                    maxlength="254"
                 />
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2 text-xs" />
             </div>
         </div>
 
-        <!-- Password -->
+        <!-- Password with simplified requirements -->
         <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <x-input-label for="password" :value="__('Password *')" />
             <x-text-input 
-                wire:model="password" 
+                wire:model.blur="password" 
+                wire:blur="validateField('password')"
                 id="password" 
                 class="block mt-1 w-full text-custom-black text-sm"
                 type="password"
                 name="password"
                 required 
-                autocomplete="new-password" 
+                autocomplete="new-password"
+                minlength="8"
+                maxlength="64"
+                pattern="[^\s]+"
+                title="{{ __('Spaces are not allowed') }}"
             />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-input-error :messages="$errors->get('password')" class="mt-2 text-xs" />
         </div>
 
         <!-- Confirm Password -->
         <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
+            <x-input-label for="password_confirmation" :value="__('Confirm Password *')" />
             <x-text-input 
-                wire:model="password_confirmation" 
+                wire:model.blur="password_confirmation" 
+                wire:blur="validateField('password_confirmation')"
                 id="password_confirmation" 
                 class="block mt-1 w-full text-custom-black text-sm"
                 type="password"
                 name="password_confirmation" 
                 required 
-                autocomplete="new-password" 
+                autocomplete="new-password"
+                minlength="8"
+                maxlength="64"
             />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-xs" />
         </div>
 
         <div>
             <x-primary-button 
                 class="w-full flex justify-center items-center relative mt-4"
                 wire:loading.attr="disabled"
+                wire:target="register"
             >
-                <span wire:loading.remove>{{ __('Register') }}</span>
-                <span wire:loading class="flex items-center">
+                <span wire:loading.remove wire:target="register">{{ __('Register') }}</span>
+                <span wire:loading wire:target="register" class="flex items-center">
                     <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

@@ -9,6 +9,15 @@ new #[Layout('layouts.guest')] class extends Component
 {
     public LoginForm $form;
 
+    // Add method to validate single field
+    public function validateField($field)
+    {
+        // Only validate if the field has a value
+        if (!empty($this->form->{$field})) {
+            $this->validateOnly('form.' . $field);
+        }
+    }
+
     /**
      * Handle an incoming authentication request.
      */
@@ -31,9 +40,10 @@ new #[Layout('layouts.guest')] class extends Component
     <form wire:submit="login" class="space-y-6">
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
+            <x-input-label for="email" :value="__('Email *')" />
             <x-text-input 
-                wire:model="form.email" 
+                wire:model.blur="form.email"
+                wire:blur="validateField('email')"
                 id="email" 
                 class="block mt-1 w-full text-custom-black text-sm" 
                 type="email" 
@@ -42,16 +52,19 @@ new #[Layout('layouts.guest')] class extends Component
                 autofocus 
                 autocomplete="username"
                 placeholder="{{ __('email@example.com') }}"
+                minlength="3"
+                maxlength="254"
             />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
+            <x-input-error :messages="$errors->get('form.email')" class="mt-2 text-xs" />
         </div>
 
         <!-- Password -->
         <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <x-input-label for="password" :value="__('Password *')" />
             <div class="relative">
                 <x-text-input 
-                    wire:model="form.password" 
+                    wire:model.blur="form.password"
+                    wire:blur="validateField('password')"
                     id="password" 
                     x-ref="passwordInput"
                     class="block mt-1 w-full pr-10 text-custom-black text-sm" 
@@ -60,6 +73,8 @@ new #[Layout('layouts.guest')] class extends Component
                     required 
                     autocomplete="current-password"
                     placeholder="{{ __('********') }}"
+                    minlength="8"
+                    maxlength="64"
                 />
                 <button 
                     type="button" 
@@ -87,7 +102,8 @@ new #[Layout('layouts.guest')] class extends Component
                     </svg>
                 </button>
             </div>
-            <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
+            <x-input-error :messages="$errors->get('form.password')" class="mt-2 text-xs" />
+            <p class="text-xs text-gray-500 mt-1">{{ __('Minimum 8 characters') }}</p>
         </div>
 
         <!-- Remember Me -->
@@ -115,13 +131,14 @@ new #[Layout('layouts.guest')] class extends Component
             <x-primary-button 
                 class="w-full flex justify-center items-center relative"
                 wire:loading.attr="disabled"
+                wire:target="login"
             >
-                <span wire:loading.remove>{{ __('Log in') }}</span>
-                <span wire:loading class="flex items-center">
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <span wire:loading.remove wire:target="login">{{ __('Log in') }}</span>
+                <span wire:loading wire:target="login" class="flex items-center">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>                    
+                    </svg>
                 </span>
             </x-primary-button>
         </div>
