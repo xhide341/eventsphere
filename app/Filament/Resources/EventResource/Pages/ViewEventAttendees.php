@@ -9,6 +9,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\Action;
 
@@ -36,6 +37,9 @@ class ViewEventAttendees extends Page implements HasTable
         return $table
             ->query($query)
             ->columns([
+                ImageColumn::make('avatar')
+                    ->getStateUsing(fn($record) => $record->avatar)
+                    ->circular(),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
