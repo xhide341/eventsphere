@@ -29,10 +29,12 @@ class ViewEventAttendees extends Page implements HasTable
 
     public function table(Table $table): Table
     {
+        $query = $this->event->users()
+            ->select('users.*', 'registrations.registration_date')
+            ->getQuery();
+
         return $table
-            ->query(
-                $this->event->users()->getQuery()
-            )
+            ->query($query)
             ->columns([
                 TextColumn::make('name')
                     ->searchable()
@@ -40,7 +42,7 @@ class ViewEventAttendees extends Page implements HasTable
                 TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('pivot.registration_date')
+                TextColumn::make('registration_date')
                     ->label('Registration Date')
                     ->dateTime()
                     ->sortable(query: function (Builder $query, string $direction): Builder {

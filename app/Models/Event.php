@@ -48,6 +48,10 @@ class Event extends Model
         'speaker_id' => 'integer',
     ];
 
+    protected $pivotCasts = [
+        'registration_date' => 'datetime',
+    ];
+
     public function venue(): BelongsTo
     {
         return $this->belongsTo(Venue::class);
@@ -61,7 +65,8 @@ class Event extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'registrations')
-            ->withPivot('registration_date');
+            ->withPivot('registration_date')
+            ->withTimestamps();
     }
 
     public function speaker(): BelongsTo
