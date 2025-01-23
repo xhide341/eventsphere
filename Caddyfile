@@ -6,19 +6,13 @@
 }
 
 :10000 {
-    # Enable FrankenPHP
-    php_server {
-        # FrankenPHP specific settings
-        worker /app/public/index.php
-        env APP_ENV=production
+    # Proxy all requests to Octane
+    reverse_proxy localhost:10000 {
+        header_up X-Forwarded-Proto {http.request.scheme}
+        header_up X-Forwarded-For {http.request.remote.host}
+        header_up Host {http.request.host}
     }
-    
-    # Set root directory
-    root * /app/public
-    
-    # Enable file serving
-    file_server
-    
+
     # Basic logging
     log {
         output stdout
