@@ -70,13 +70,10 @@ class ViewEventAttendees extends Page implements HasTable
                             ->select('users.*', 'registrations.registration_date')
                             ->get();
 
-                        $pdf = Pdf::setOptions([
-                            'isRemoteEnabled' => true,
-                            'chroot' => base_path('vendor/iamcal/php-emoji/lib')
-                        ])->loadView('filament.resources.event-resource.pdf.event-attendees', [
-                                    'event' => $this->event,
-                                    'attendees' => $attendees,
-                                ]);
+                        $pdf = Pdf::loadView('filament.resources.event-resource.pdf.event-attendees', [
+                            'event' => $this->event,
+                            'attendees' => $attendees,
+                        ]);
 
                         return response()->streamDownload(function () use ($pdf) {
                             echo $pdf->stream();
