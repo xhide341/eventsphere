@@ -13,8 +13,6 @@ WORKDIR ${APP_PATH}
 
 # Copy application files
 COPY . ${APP_PATH}
-# Copy Caddyfile
-COPY Caddyfile /etc/caddy/Caddyfile
 
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction && \
@@ -24,13 +22,11 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction && \
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
 # Set permissions
-RUN chmod 755 /usr/local/bin/frankenphp && \
-    chown root:root /usr/local/bin/frankenphp && \
-    chmod -R 775 ${APP_PATH} && \
+RUN chmod -R 775 ${APP_PATH} && \
     chown -R root:root ${APP_PATH}
 
-# Healthcheck using port 10000
+# Healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:10000/up || exit 1
+    CMD curl -f http://localhost:10000/health || exit 1
 
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
