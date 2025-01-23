@@ -21,9 +21,15 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction && \
 # Copy supervisor configuration
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-# Set permissions
-RUN chmod -R 775 ${APP_PATH} && \
+# Set correct permissions for FrankenPHP binary and application
+RUN chmod +x /usr/local/bin/frankenphp && \
+    chown root:root /usr/local/bin/frankenphp && \
+    chmod 755 /usr/local/bin/frankenphp && \
+    chmod -R 775 ${APP_PATH} && \
     chown -R root:root ${APP_PATH}
+
+# Verify FrankenPHP installation
+RUN /usr/local/bin/frankenphp -v
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
