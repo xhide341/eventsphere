@@ -1,0 +1,11 @@
+{
+    # Disable automatic HTTPS since Render handles it
+    auto_https off
+    # Disable admin API
+    admin off
+}
+
+:10000 {
+    root * /app/public
+    php_server
+} 

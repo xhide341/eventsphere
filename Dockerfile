@@ -3,12 +3,6 @@ FROM shinsenter/frankenphp:php8.3
 ENV SERVER_NAME=eventsphere-eqyq.onrender.com
 ENV APP_PATH=/app
 ENV DOCUMENT_ROOT=/public
-ENV SSL_CERT_PATH=/etc/ssl/site/server.crt
-ENV SSL_KEY_PATH=/etc/ssl/site/server.key
-
-# Create necessary directories for Caddy/ACME
-RUN mkdir -p /data/caddy/acme && \
-    chmod -R 755 /data/caddy
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -19,6 +13,8 @@ WORKDIR ${APP_PATH}
 
 # Copy application files
 COPY . ${APP_PATH}
+# Copy Caddyfile
+COPY Caddyfile /etc/caddy/Caddyfile
 
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction && \
@@ -27,17 +23,14 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction && \
 # Copy supervisor configuration
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-# Set permissions with more explicit commands
+# Set permissions
 RUN chmod 755 /usr/local/bin/frankenphp && \
     chown root:root /usr/local/bin/frankenphp && \
     chmod -R 775 ${APP_PATH} && \
-    chown -R root:root ${APP_PATH} && \
-    mkdir -p /etc/ssl/site && \
-    chmod 755 /etc/ssl/site
+    chown -R root:root ${APP_PATH}
 
-# Add healthcheck
+# Healthcheck using port 10000
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:10000/up || exit 1
 
-# Use supervisor to manage processes
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
