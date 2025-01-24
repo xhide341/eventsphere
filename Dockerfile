@@ -18,4 +18,5 @@ RUN mkdir -p /var/www/html/public \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
-CMD ["/usr/local/bin/docker-entrypoint.sh"]
+# Start both services
+CMD ["sh", "-c", "php-fpm && nginx -g 'daemon off;'"]
