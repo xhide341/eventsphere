@@ -1,4 +1,4 @@
-FROM shinsenter/20250122-8.3-fpm-nginx
+FROM shinsenter/php-archives:20250122-8.3-fpm-nginx
 
 COPY . .
 
