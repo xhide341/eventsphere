@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# 1. Added debug information
+# Debug information
 echo "Starting deployment process..."
 echo "PHP Version: $(php -v)"
 echo "Using PORT: ${PORT}"
 
-# 2. Add database configuration debug
+# Database configuration debug
 echo "Database configuration:"
 echo "DB_CONNECTION: ${DB_CONNECTION}"
 echo "DB_HOST: ${DB_HOST}"
@@ -13,7 +13,7 @@ echo "DB_PORT: ${DB_PORT}"
 echo "DB_DATABASE: ${DB_DATABASE}"
 echo "DB_USERNAME: ${DB_USERNAME}"
 
-# 3. Test database connection with more verbose output
+# Test database connection
 echo "Testing database connection..."
 if php artisan db:monitor --verbose; then
     echo "✅ Database connection successful!"
@@ -23,15 +23,16 @@ else
     exit 1
 fi
 
-# 4. Run migrations
+# Run migrations
 echo "Running migrations..."
 php artisan migrate --force --graceful
 
-# Clear and rebuild route cache
+# Clear and rebuild cache
 echo "Caching config..."
 php artisan config:cache
 echo "Caching routes..."
 php artisan route:cache
 
-# Start supervisor (it will manage both FrankenPHP and queue workers)
-exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisor.conf
+# Set permissions (if needed)
+chown -R www-data:www-data /var/www/html/storage
+chmod -R 775 /var/www/html/storage

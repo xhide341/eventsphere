@@ -1,0 +1,79 @@
+FROM shinsenter/frankenphp:php8.3
+
+ENV SERVER_NAME=eventsphere-eqyq.onrender.com
+ENV APP_PATH=/app
+ENV DOCUMENT_ROOT=/public
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR ${APP_PATH}
+
+# Copy application files
+COPY . ${APP_PATH}
+
+# Install composer dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction && \
+    php artisan octane:install
+
+# Copy supervisor configuration
+COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+
+# Set correct permissions for FrankenPHP binary and application
+RUN chmod +x /usr/local/bin/frankenphp && \
+    chown root:root /usr/local/bin/frankenphp && \
+    chmod 755 /usr/local/bin/frankenphp && \
+    chmod -R 775 ${APP_PATH} && \
+    chown -R root:root ${APP_PATH}
+
+# Verify FrankenPHP installation
+RUN /usr/local/bin/frankenphp -v
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:10000/health || exit 1
+
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
+
+
+# deploy.sh
+
+# #!/bin/bash
+
+# # 1. Added debug information
+# echo "Starting deployment process..."
+# echo "PHP Version: $(php -v)"
+# echo "Using PORT: ${PORT}"
+
+# # 2. Add database configuration debug
+# echo "Database configuration:"
+# echo "DB_CONNECTION: ${DB_CONNECTION}"
+# echo "DB_HOST: ${DB_HOST}"
+# echo "DB_PORT: ${DB_PORT}"
+# echo "DB_DATABASE: ${DB_DATABASE}"
+# echo "DB_USERNAME: ${DB_USERNAME}"
+
+# # 3. Test database connection with more verbose output
+# echo "Testing database connection..."
+# if php artisan db:monitor --verbose; then
+#     echo "✅ Database connection successful!"
+# else
+#     echo "❌ Database connection failed with status $?"
+#     php artisan db:show --verbose
+#     exit 1
+# fi
+
+# # 4. Run migrations
+# echo "Running migrations..."
+# php artisan migrate --force --graceful
+
+# # Clear and rebuild route cache
+# echo "Caching config..."
+# php artisan config:cache
+# echo "Caching routes..."
+# php artisan route:cache
+
+# # Start supervisor (it will manage both FrankenPHP and queue workers)
+# exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisor.conf

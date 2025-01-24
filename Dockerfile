@@ -1,38 +1,20 @@
-FROM shinsenter/frankenphp:php8.3
+FROM richarvey/nginx-php-fpm:latest
 
-ENV SERVER_NAME=eventsphere-eqyq.onrender.com
-ENV APP_PATH=/app
-ENV DOCUMENT_ROOT=/public
+COPY . .
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    supervisor \
-    && rm -rf /var/lib/apt/lists/*
+# Image config
+ENV SKIP_COMPOSER 0
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
 
-WORKDIR ${APP_PATH}
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
 
-# Copy application files
-COPY . ${APP_PATH}
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Install composer dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction && \
-    php artisan octane:install
-
-# Copy supervisor configuration
-COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
-
-# Set correct permissions for FrankenPHP binary and application
-RUN chmod +x /usr/local/bin/frankenphp && \
-    chown root:root /usr/local/bin/frankenphp && \
-    chmod 755 /usr/local/bin/frankenphp && \
-    chmod -R 775 ${APP_PATH} && \
-    chown -R root:root ${APP_PATH}
-
-# Verify FrankenPHP installation
-RUN /usr/local/bin/frankenphp -v
-
-# Healthcheck
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:10000/health || exit 1
-
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
+CMD ["/start.sh"]
