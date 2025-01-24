@@ -49,4 +49,6 @@ RUN chown -R sail:sail /var/www/html && \
 # Run as root to allow certificate installation
 USER root
 
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
+
 ENTRYPOINT ["php", "artisan", "octane:frankenphp", "--host=localhost", "--port=443", "--admin-port=2019", "--https", "--http-redirect", "--watch"]
