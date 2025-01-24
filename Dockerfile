@@ -21,5 +21,8 @@ RUN mkdir -p /var/www/html/public \
 # Configure PHP-FPM to use TCP instead of socket
 RUN sed -i 's|listen = /run/php-fpm.sock|listen = 127.0.0.1:9000|' /usr/local/etc/php-fpm.d/www.conf
 
+# Configure Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Start both services
-CMD ["sh", "-c", "rm -f /run/php-fpm.sock && php-fpm && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "rm -f /run/php-fpm.sock && php-fpm -D && nginx -g 'daemon off;'"]
