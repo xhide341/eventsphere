@@ -20,7 +20,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.reset');
 
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed'])
+        ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 
     Volt::route('verify-email', 'pages.auth.verify-email')

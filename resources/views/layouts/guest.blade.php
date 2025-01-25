@@ -70,6 +70,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                         </svg>
                     </a>
+                @elseif (Route::currentRouteName() === 'verification.notice')
+                    <a href="{{ route('register') }}"
+                        class="absolute top-4 left-4 p-2 text-gray-600 hover:text-accent transition-colors duration-200"
+                        wire:navigate>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                        </svg>
+                    </a>
                 @endif
 
 
@@ -78,6 +87,10 @@
                     @if (Route::currentRouteName() === 'password.request' || Route::currentRouteName() === 'password.reset')
                         <div class="flex flex-col items-center justify-center">
                             <h1 class="md:text-3xl text-2xl text-accent font-bold mb-2">Reset Password</h1>
+                        </div>
+                    @elseif (Route::currentRouteName() === 'verification.notice')
+                        <div class="flex flex-col items-center justify-center">
+                            <h1 class="md:text-3xl text-2xl text-accent font-bold mb-2">Verify Your Email</h1>
                         </div>
                     @endif
                     <div class="w-full sm:max-w-md sm:px-6 sm:pt-4 overflow-hidden sm:rounded-lg z-10">

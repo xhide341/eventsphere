@@ -32,24 +32,34 @@ new #[Layout('layouts.guest')] class extends Component
             return;
         }
 
+        // Check resend limit
+        $resendCount = Session::get('resend_count', 0);
+        $resendLimit = 6;
+
+        if ($resendCount >= $resendLimit) {
+            Session::flash('status', 'resend-limit-reached');
+            return;
+        }
+
         // Create temporary notifiable object
         $notifiable = new PendingUserNotifiable($pendingUser['id'], $pendingUser['email']);
 
         // Send verification using Laravel's default notification
         Notification::send($notifiable, new DefaultVerifyEmail);
 
+        // Increment resend count
+        Session::put('resend_count', $resendCount + 1);
+
         Session::flash('status', 'verification-link-sent');
     }
 }; ?>
 
-<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+<div>
     <div class="space-y-6">
-        <div class="text-center">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
-            <p class="text-sm text-gray-600">
-                Thanks for signing up! Before getting started, please verify your email address by clicking the link we just sent to <span class="font-medium text-primary">{{ Session::get('pending_user.email', 'your email address') }}</span>.
-            </p>
-        </div>
+        <p class="text-sm text-gray-600 text-center">
+        Thanks for signing up! Please check your email for a verification link we just sent to <span
+        class="font-medium text-primary">{{ Session::get('pending_user.email', 'your email address') }}</span>.
+        </p>
 
         @if (session('status') == 'verification-link-sent')
             <div class="bg-green-50 border-l-4 border-green-400 p-4">
@@ -60,13 +70,20 @@ new #[Layout('layouts.guest')] class extends Component
         @endif
 
         <div class="flex items-center justify-between">
-            <button wire:click="resendVerification" type="button" class="btn-primary">
-                Resend Verification Email
-            </button>
-
-            <a href="{{ route('register') }}" class="text-sm text-gray-600 hover:text-gray-900 underline">
-                Start Over
-            </a>
+            <x-primary-button 
+                class="w-full flex justify-center items-center relative"
+                wire:click="resendVerification"
+                wire:loading.attr="disabled"
+                wire:target="resendVerification"
+            >
+                <span wire:loading.remove wire:target="resendVerification">{{ __('Resend Verification Email') }}</span>
+                <span wire:loading wire:target="resendVerification" class="flex items-center">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </span>
+            </x-primary-button>
         </div>
     </div>
 </div>
