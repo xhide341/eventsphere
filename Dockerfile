@@ -18,6 +18,10 @@ RUN mkdir -p /var/www/html/public \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
+# Set permissions for the public directory
+RUN chown -R www-data:www-data /var/www/html/public \
+    && chmod -R 755 /var/www/html/public
+
 # Configure Nginx
 COPY conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 
