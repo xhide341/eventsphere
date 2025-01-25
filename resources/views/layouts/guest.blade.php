@@ -27,7 +27,7 @@
 <body class="font-poppins text-primary antialiased">
     <div class="min-h-screen flex">
         @if (Route::currentRouteName() === 'register' || Route::currentRouteName() === 'login')
-            <div class="w-full px-6 md:px-0 md:w-1/2 flex justify-center items-center bg-patten-blue">
+            <div class="w-full px-0 md:w-1/2 flex justify-center items-center bg-patten-blue">
                 <div
                     class="flex flex-col items-center justify-center shadow-lg md:shadow-none bg-white md:bg-transparent p-4 md:p-6 rounded-lg">
                     @if (Route::currentRouteName() === 'login')
@@ -59,7 +59,7 @@
             </div>
         @else
             <!-- Centered layout for password reset -->
-            <div class="px-6 md:px-0 w-full flex justify-center items-center bg-patten-blue">
+            <div class="px-0 w-full flex justify-center items-center bg-patten-blue">
                 <!-- Back Button -->
                 @if (Route::currentRouteName() === 'password.request')
                     <a href="{{ route('login') }}"
@@ -72,13 +72,15 @@
                     </a>
                 @endif
 
-                <div class="flex flex-col items-center justify-center shadow-lg bg-white p-4 md:p-6 rounded-lg mx-4">
-                    @if (Route::currentRouteName() === 'password.request')
+
+                <div
+                    class="flex flex-col items-center justify-center shadow-lg bg-white px-4 py-6 md:px-6 md:py-8 lg:py-10 rounded-lg mx-4">
+                    @if (Route::currentRouteName() === 'password.request' || Route::currentRouteName() === 'password.reset')
                         <div class="flex flex-col items-center justify-center">
                             <h1 class="md:text-3xl text-2xl text-accent font-bold mb-2">Reset Password</h1>
                         </div>
                     @endif
-                    <div class="w-full sm:max-w-md px-6 pt-4 overflow-hidden sm:rounded-lg z-10">
+                    <div class="w-full sm:max-w-md sm:px-6 sm:pt-4 overflow-hidden sm:rounded-lg z-10">
                         {{ $slot }}
                     </div>
                 </div>

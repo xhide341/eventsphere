@@ -42,7 +42,7 @@ new #[Layout('layouts.guest')] class extends Component
         <div>
             <x-input-label for="email" :value="__('Email *')" />
             <x-text-input 
-                wire:model.blur="form.email"
+                wire:model="form.email"
                 wire:blur="validateField('email')"
                 id="email" 
                 class="block mt-1 w-full text-custom-black text-sm" 
@@ -63,7 +63,7 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-label for="password" :value="__('Password *')" />
             <div class="relative">
                 <x-text-input 
-                    wire:model.blur="form.password"
+                    wire:model="form.password"
                     wire:blur="validateField('password')"
                     id="password" 
                     x-ref="passwordInput"
@@ -103,7 +103,6 @@ new #[Layout('layouts.guest')] class extends Component
                 </button>
             </div>
             <x-input-error :messages="$errors->get('form.password')" class="mt-2 text-xs" />
-            <p class="text-xs text-gray-500 mt-1">{{ __('Minimum 8 characters') }}</p>
         </div>
 
         <!-- Remember Me -->

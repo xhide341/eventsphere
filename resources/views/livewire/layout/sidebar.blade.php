@@ -84,8 +84,8 @@
         </nav>
     </div>
 
-    <div class="text-center text-sm mx-auto flex items-center text-gray-500 mt-4">
-        Made with <span class="text-red-500 mx-1">♥</span> by xhide3
+    <div class="text-center text-xs mx-auto flex items-center text-gray-500 mt-4">
+        &copy; {{ date('Y') }} All rights reserved.
     </div>
 
 </div>

@@ -70,8 +70,8 @@
                         <div class="absolute inset-0 h-2/3 bg-gray-50"></div>
                         <div class="relative mx-auto">
                             <div class="lg:max-w-6xl lg:mx-auto rounded-md">
-                                <img src="{{ Vite::asset('resources/images/welcome-images/welcome-img.png') }}" alt="Eventsphere Admin Screenshot"
-                                class="rounded-md">
+                                <img src="{{ Vite::asset('resources/images/welcome-images/welcome-img.png') }}"
+                                    alt="Eventsphere Admin Screenshot" class="rounded-md">
                             </div>
                         </div>
                     </div>
