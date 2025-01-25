@@ -19,7 +19,7 @@ RUN mkdir -p /var/www/html/public \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
 # Configure Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 
 # Start both services
 CMD ["/start.sh"]
