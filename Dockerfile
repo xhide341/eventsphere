@@ -3,8 +3,8 @@ FROM shinsenter/php-archives:20250122-8.3-fpm-nginx
 COPY . .
 
 # Only essential overrides for Render
-ENV NGINX_HTTP_PORT ${PORT}  # Required for Render
-ENV WEBROOT /var/www/html/public  # Required for Laravel
+ENV NGINX_HTTP_PORT ${PORT}
+ENV WEBROOT /var/www/html/public
 
 # Laravel production mode
 ENV APP_ENV production
@@ -20,6 +20,10 @@ RUN mkdir -p /var/www/html/public \
 
 # Configure Nginx
 COPY conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
+
+# Copy deploy script
+COPY scripts/00-laravel-deploy.sh /usr/local/bin/00-laravel-deploy.sh
+RUN chmod +x /usr/local/bin/00-laravel-deploy.sh
 
 # Start both services
 CMD ["/start.sh"]
