@@ -11,6 +11,8 @@ ENV LOG_CHANNEL stderr
 
 # Fix permissions and directory structure
 RUN mkdir -p /var/www/html/public \
+    && mkdir -p /var/www/html/storage \
+    && mkdir -p /var/www/html/bootstrap/cache \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && chmod -R 775 /var/www/html/storage \
