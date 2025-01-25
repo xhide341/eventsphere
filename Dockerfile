@@ -1,7 +1,5 @@
 FROM shinsenter/php-archives:20250122-8.3-fpm-nginx
 
-COPY . .
-
 # Only essential overrides for Render
 ENV NGINX_HTTP_PORT ${PORT}
 ENV WEBROOT /var/www/html/public
@@ -21,6 +19,8 @@ RUN mkdir -p /var/www/html/public \
 # Set permissions for the public directory
 RUN chown -R www-data:www-data /var/www/html/public \
     && chmod -R 755 /var/www/html/public
+
+COPY . /var/www/html/public
 
 # Configure Nginx
 COPY conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
