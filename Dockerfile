@@ -25,5 +25,11 @@ COPY conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 COPY scripts/00-laravel-deploy.sh /usr/local/bin/00-laravel-deploy.sh
 RUN chmod +x /usr/local/bin/00-laravel-deploy.sh
 
+# Copy the start script into the container
+COPY scripts/start.sh /scripts/start.sh
+
+# Make sure the script is executable
+RUN chmod +x /scripts/start.sh
+
 # Start both services
-CMD ["/start.sh"]
+CMD ["/bin/bash", "/scripts/start.sh"]
