@@ -29,8 +29,8 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'role' => fake()->randomElement(['user', 'admin']),
-            'avatar' => 'https://robohash.org/' . uniqid() . '?set=set4',
-            'avatar_type' => 'robohash',
+            'avatar' => 'https://api.dicebear.com/9.x/big-smile/svg?mouth=teethSmile&seed=' . uniqid(),
+            'avatar_type' => 'dicebear',
             'google_id' => null,
             'remember_token' => Str::random(10),
         ];
