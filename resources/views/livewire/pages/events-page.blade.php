@@ -51,10 +51,11 @@
                     <p class="mt-1 text-sm text-gray-600">
                         {{ __("Browse your registered events here.") }}
                     </p>
+                    <hr class="w-full border-t border-gray-300 my-4">
                 </header>
 
                 <!-- Department buttons for Registered Events -->
-                <div class="flex flex-wrap gap-2 mt-4">
+                <div class="flex flex-wrap gap-2 mb-2">
                     <button wire:click="$set('registeredEventsDepartmentName', '')"
                         class="px-4 py-2 text-sm font-medium {{ $registeredEventsDepartmentName === '' ? 'bg-indigo-100 text-primary' : 'text-primary-dark bg-custom-white' }} border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none">
                         ALL
@@ -87,7 +88,6 @@
             <div class="bg-custom-white shadow-sm rounded-lg flex flex-col p-4 sm:p-8">
                 <header>
                     <div class="flex flex-row space-x-2">
-
                         <h2 class="text-xl font-medium text-primary-dark align-middle">
                             {{ __('All Events') }}
                         </h2>
@@ -95,10 +95,11 @@
                     <p class="mt-1 text-sm text-gray-600">
                         {{ __("Browse all the events here.") }}
                     </p>
+                    <hr class="w-full border-t border-gray-300 my-4">
                 </header>
 
                 <!-- Department buttons for All Events -->
-                <div class="flex flex-wrap gap-2 mt-4">
+                <div class="flex flex-wrap gap-2 mb-2">
                     <button wire:click="$set('allEventsDepartmentName', '')"
                         class="px-4 py-2 text-sm font-medium {{ $allEventsDepartmentName === '' ? 'bg-indigo-100 text-primary' : 'text-primary-dark bg-custom-white' }} border border-gray-300 rounded-md hover:bg-gray-50">
                         ALL

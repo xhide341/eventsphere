@@ -4,7 +4,7 @@
         <div class="ml-1 rounded-lg flex flex-row flex-wrap items-center w-full">
             <nav class="bg-transparent antialiased text-primary-dark">
                 <ol class="flex flex-wrap mr-8 bg-transparent items-center">
-                    <li class="text-sm breadcrumb-item align-middle">
+                    <li class="text-sm align-middle">
                         <x-heroicon-s-home class="w-5 h-5 text-primary-dark" />
                     </li>
                     <li class="text-sm capitalize leading-normal flex items-center">
@@ -157,7 +157,7 @@
                     @if($eventCompleted)
                         <button 
                             disabled
-                            class="bg-gray-500 text-white rounded-lg ml-2 text-sm px-4 py-3 font-semibold cursor-not-allowed"
+                            class="bg-gray-500 text-white rounded-md ml-2 text-sm px-4 py-3 font-semibold cursor-not-allowed"
                         >
                             Event Completed
                         </button>
@@ -167,7 +167,7 @@
                                 wire:click="confirmRegistration"
                                 wire:loading.attr="disabled"
                                 wire:target="confirmRegistration"
-                                class="bg-red-600 text-white rounded-lg ml-2 text-sm px-4 py-3 font-semibold hover:bg-red-700 transition-colors inline-flex items-center"
+                                class="bg-red-600 text-white rounded-md ml-2 text-sm px-4 py-3 font-semibold hover:bg-red-700 transition-colors inline-flex items-center"
                             >
                                 <span wire:loading.remove wire:target="confirmRegistration">Cancel Registration</span>
                                 <span wire:loading wire:target="confirmRegistration" class="flex items-center justify-center">
@@ -182,7 +182,7 @@
                                 wire:click="confirmRegistration"
                                 wire:loading.attr="disabled"
                                 wire:target="confirmRegistration"
-                                class="bg-primary text-white rounded-lg ml-2 text-sm px-4 py-3 font-semibold hover:bg-primary-dark transition-colors inline-flex items-center"
+                                class="bg-primary text-white rounded-md ml-2 text-sm px-4 py-3 font-semibold hover:bg-primary-dark transition-colors inline-flex items-center"
                             >
                                 <span wire:loading.remove wire:target="confirmRegistration">Register for Event</span>
                                 <span wire:loading wire:target="confirmRegistration" class="flex items-center justify-center">
@@ -216,7 +216,7 @@
                         @if($showFeedbackForm)
                             <button 
                                 wire:click="toggleFeedbackForm"
-                                class="p-2 text-gray-500 hover:text-gray-700 rounded-full transition-colors"
+                                class="p-2 text-gray-500 hover:text-gray-700 rounded-md transition-colors"
                                 title="Close"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -226,14 +226,14 @@
                         @elseif(!$userFeedbackExists)
                             <button 
                                 wire:click="$toggle('showFeedbackForm')"
-                                class="bg-primary text-white rounded-lg px-4 py-2 hover:bg-primary-dark transition-colors"
+                                class="bg-primary text-white rounded-md px-4 py-2 hover:bg-primary-dark transition-colors"
                             >
                                 Write a Review
                             </button>
                         @else
                             <button 
                                 wire:click="editFeedback"
-                                class="bg-primary text-white rounded-lg px-4 py-2 hover:bg-primary-dark transition-colors"
+                                class="bg-primary text-white rounded-md px-4 py-2 hover:bg-primary-dark transition-colors"
                             >
                                 Edit Your Review
                             </button>

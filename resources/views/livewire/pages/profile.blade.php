@@ -25,12 +25,30 @@
     <div class="mt-4">
         <div class="max-w-dvw mx-auto space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-sm rounded-lg">
+                <header>
+                    <div class="flex flex-row items-center space-x-2">
+                        <h2 class="text-lg font-medium text-primary-dark align-middle">
+                            {{ __('Profile Information') }}
+                        </h2>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-600">
+                        {{ __("Update your profile information here.") }}
+                    </p>
+                </header>
                 <div class="max-w-xl">
                     <livewire:profile.update-profile-information-form />
                 </div>
             </div>
 
             <div class="p-4 sm:p-8 bg-white shadow-sm rounded-lg">
+                <header>
+                    <h2 class="text-lg font-medium text-primary-dark">
+                        {{ __('Update Password') }}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-600">
+                        {{ __('Ensure your account is using a long, random password to stay secure.') }}
+                    </p>
+                </header>
                 <div class="max-w-xl">
                     <livewire:profile.update-password-form />
                 </div>

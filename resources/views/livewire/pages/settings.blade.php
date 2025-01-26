@@ -32,13 +32,13 @@
                 </p>
 
                 <div class="mt-6 flex flex-col gap-4">
-                    <!-- Event Notifications Toggle -->
+                    <!-- Event Registration Toggle -->
                     <div class="h-px w-full bg-gray-200"></div>
                     <div class="flex items-center justify-between">
                         <div class="flex flex-col flex-grow">
-                            <span class="text-sm font-medium text-primary-dark">Event Notifications</span>
+                            <span class="text-sm font-medium text-primary-dark">Registration Notification</span>
                             <span class="text-sm text-gray-500">
-                                Receive email notifications for event registrations and cancellations
+                                Receive email alerts for event registrations and cancellations.
                             </span>
                         </div>
                         <button wire:click="toggleNotifications" type="button"
@@ -47,6 +47,23 @@
                             aria-checked="{{ auth()->user()->event_notifications_enabled ? 'true' : 'false' }}">
                             <span aria-hidden="true"
                                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ auth()->user()->event_notifications_enabled ? 'translate-x-5' : 'translate-x-0' }}"></span>
+                        </button>
+                    </div>
+
+                    <!-- Event Notification Toggle -->
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex flex-col flex-grow">
+                            <span class="text-sm font-medium text-primary-dark">Event Notification</span>
+                            <span class="text-sm text-gray-500">
+                                Receive email alerts when an event is about to begin.
+                            </span>
+                        </div>
+                        <button wire:click="toggleEventStartAlerts" type="button"
+                            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 {{ auth()->user()->event_start_alerts_enabled ? 'bg-primary' : 'bg-gray-200' }}"
+                            role="switch"
+                            aria-checked="{{ auth()->user()->event_start_alerts_enabled ? 'true' : 'false' }}">
+                            <span aria-hidden="true"
+                                class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ auth()->user()->event_start_alerts_enabled ? 'translate-x-5' : 'translate-x-0' }}"></span>
                         </button>
                     </div>
 
@@ -67,7 +84,7 @@
                 <p class="mt-1 text-sm text-gray-500">
                     {{ __('Manage your account session.') }}
                 </p>
-
+                <hr class="w-full border-t border-gray-300 my-4">
                 <div class="mt-6">
                     <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-logout')">
                         {{ __('Logout') }}

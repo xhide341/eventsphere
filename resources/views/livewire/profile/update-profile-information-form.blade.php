@@ -37,29 +37,12 @@ new class extends Component
     public function generateAvatarUrl(): void
     {
         $user = Auth::user();
-        if ($user->avatar) {
-            try {
-                if ($user->avatar_type === 's3') {
-                    // Generate temporary URL for S3 stored avatars
-                    $this->avatarUrl = Storage::disk('s3')->temporaryUrl($user->avatar, now()->addMinutes(5));
-                } else {
-                    // For Google avatars, use the URL directly
-                    $this->avatarUrl = $user->avatar;
-                }
-                Log::info('Avatar URL generated successfully', [
-                    'user_id' => $user->id, 
-                    'avatar_type' => $user->avatar_type
-                ]);
-            } catch (\Exception $e) {
-                $this->avatarUrl = "https://ui-avatars.com/api/?name=" . urlencode($user->name);
-                Log::error('Failed to generate avatar URL', [
-                    'error' => $e->getMessage(),
-                    'user_id' => $user->id
-                ]);
-            }
+        if ($user->avatar_type === 'google') {
+            $this->avatarUrl = $user->avatar;
+        } elseif ($user->avatar_type === 's3') {
+            $this->avatarUrl = Storage::disk('s3')->temporaryUrl($user->avatar, now()->addMinutes(120));
         } else {
-            $this->avatarUrl = "https://ui-avatars.com/api/?name=" . urlencode($user->name);
-            Log::info('No avatar set for user', ['user_id' => $user->id]);
+            $this->avatarUrl = "https://api.dicebear.com/9.x/initials/svg?seed=" . urlencode($user->name);
         }
     }
 
@@ -159,17 +142,6 @@ new class extends Component
 }; ?>
 
 <section>
-    <header>
-        <div class="flex flex-row items-center space-x-2">
-            <h2 class="text-lg font-medium text-primary-dark align-middle">
-                {{ __('Profile Information') }}
-            </h2>
-        </div>
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your profile information here.") }}
-        </p>
-    </header>
-
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6" enctype="multipart/form-data">
         <!-- Avatar Display and Upload Field -->
         <div x-data="{ 

@@ -38,16 +38,6 @@ new class extends Component {
 }; ?>
 
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-primary-dark">
-            {{ __('Update Password') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
-        </p>
-    </header>
-
     <form wire:submit="updatePassword" class="mt-6 space-y-6">
         <div>
             <x-input-label for="update_password_current_password" :value="__('Current Password')" />
