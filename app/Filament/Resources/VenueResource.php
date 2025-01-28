@@ -47,27 +47,27 @@ class VenueResource extends Resource
                         TextInput::make('name')
                             ->required()
                             ->maxLength(255),
-                            
+
                         TextInput::make('location')
                             ->required()
                             ->maxLength(255),
-                            
+
                         TextInput::make('capacity')
                             ->required()
                             ->numeric()
                             ->minValue(1),
-                            
+
                         Textarea::make('description')
                             ->maxLength(65535)
                             ->columnSpanFull(),
-                            
+
                         FileUpload::make('image')
                             ->disk('public')
                             ->image()
                             ->directory('venues')
                             ->multiple()
                             ->columnSpanFull()
-                            ->afterStateUpdated(function ($state, $set) {
+                            ->afterStateUpdated(function ($state, $set, $record) {
                                 if (!empty($state) && is_array($state)) {
                                     collect($state)->each(function ($path, $index) use ($record) {
                                         $record->images()->create([
@@ -87,29 +87,29 @@ class VenueResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('images.path')
-                    ->stacked()      
+                    ->stacked()
                     ->disk('public')
                     ->visibility('public')
                     ->square()
                     ->alignCenter(),
-                    
+
                 TextColumn::make('name')
                     ->searchable(),
-                    
+
                 TextColumn::make('location')
                     ->searchable(),
-                    
+
                 TextColumn::make('capacity')
                     ->numeric()
                     ->sortable()
                     ->alignCenter(),
-                    
+
                 IconColumn::make('isAvailable')
                     ->boolean()
                     ->label('Availability')
                     ->alignCenter()
-                    ->getStateUsing(fn (Venue $record): bool => $record->isAvailable()),
-                    
+                    ->getStateUsing(fn(Venue $record): bool => $record->isAvailable()),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -146,16 +146,16 @@ class VenueResource extends Resource
 
     public static function infolist(Infolist $infolist): Infolist
     {
-        return $infolist        
+        return $infolist
             ->schema([
                 InfolistSection::make('Venue Images')
-                    ->schema([                        
+                    ->schema([
                         ImageEntry::make('images.path')
                             ->label('')
                             ->disk('public')
                             ->visibility('public')
-                            ->size(400)                                                                                   
-                    ])               
+                            ->size(400)
+                    ])
             ]);
     }
 

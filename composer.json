@@ -22,6 +22,7 @@
         "symfony/postmark-mailer": "^7.2"
     },
     "require-dev": {
+        "beyondcode/laravel-er-diagram-generator": "^4.0",
         "fakerphp/faker": "^1.23",
         "laravel-shift/blueprint": "^2.10",
         "laravel/breeze": "^2.1",

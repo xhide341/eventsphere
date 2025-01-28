@@ -22,3 +22,7 @@ yarn-error.log
 **/caddy
 frankenphp
 frankenphp-worker.php
+
+.vemto_settings
+.*vemto*
+/.vemto
