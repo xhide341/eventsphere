@@ -59,12 +59,6 @@ EventSphere is powered by the TALL stack and modern DevOps tools:
 
 ---
 
-## 📸 Screenshots
-
-[Insert Grid of Application Screenshots Here]
-
----
-
 ## 🛠️ Installation
 
 ### Prerequisites (for local installation)
