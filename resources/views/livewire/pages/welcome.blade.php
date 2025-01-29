@@ -41,7 +41,7 @@
                         <h1 class="px-6 text-lg text-gray-600">Admin Dashboard and Event Management System</h1>
                         <div class="mt-5">
                             <div class="flex items-center justify-start text-center leading-normal">
-                                <h1 id="typing-text" class="text-4xl font-bold text-primary sm:text-5xl lg:text-6xl">
+                                <h1 id="typing-text" class="text-3xl font-bold text-primary sm:text-5xl lg:text-6xl">
                                     <span id="cursor" class="cursor">|</span>
                                 </h1>
                             </div>
@@ -69,7 +69,7 @@
                     <div class="relative">
                         <div class="absolute inset-0 h-2/3 bg-gray-50"></div>
                         <div class="relative mx-auto">
-                            <div class="lg:max-w-6xl lg:mx-auto rounded-md">
+                            <div class="lg:max-w-6xl lg:mx-auto rounded-md px-4 sm:px-0">
                                 <img src="{{ Vite::asset('resources/images/welcome-images/welcome-img.png') }}"
                                     alt="Eventsphere Admin Screenshot" class="rounded-md">
                             </div>

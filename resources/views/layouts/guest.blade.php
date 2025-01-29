@@ -25,11 +25,20 @@
 </head>
 
 <body class="font-poppins text-primary antialiased">
-    <div class="min-h-screen flex">
+    <div class="min-h-screen flex bg-patten-blue">
         @if (Route::currentRouteName() === 'register' || Route::currentRouteName() === 'login')
-            <div class="w-full px-0 md:w-1/2 flex justify-center items-center bg-patten-blue">
+            <div class="w-full px-0 md:w-1/2 flex justify-center items-center">
+                <header class="fixed top-0 w-full md:hidden bg-white shadow-md p-4 z-10">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <img src="{{ Vite::asset('resources/images/LCUP.png') }}" alt="Logo"
+                                class="w-10 h-10 rounded-full">
+                            <p class="font-logo text-md ml-2">{{ config('app.name') }}</p>
+                        </div>
+                    </div>
+                </header>
                 <div
-                    class="flex flex-col items-center justify-center shadow-lg md:shadow-none bg-white md:bg-transparent p-4 md:p-6 rounded-lg">
+                    class="flex flex-col items-center justify-center shadow-none bg-patten-blue md:bg-transparent p-4 md:p-6 rounded-lg">
                     @if (Route::currentRouteName() === 'login')
                         <div class="flex flex-col items-center justify-center">
                             <h1 class="lg:text-4xl md:text-3xl text-2xl text-accent font-bold mb-2">Welcome back</h1>
