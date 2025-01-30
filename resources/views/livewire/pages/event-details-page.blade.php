@@ -30,7 +30,7 @@
     <div class="mt-4 font-poppins">
         <!-- Event Details Section -->
         <div class="space-y-6 max-w-5xl overflow-hidden">
-            <div class="bg-gray-100 shadow-sm rounded-lg flex flex-col p-4 sm:p-8">
+            <div class="bg-white shadow-sm rounded-lg flex flex-col p-4 sm:p-8">
                 <!-- Event Header -->
                 <div class="relative mb-6">
                     <div class="max-w-5xl h-96 rounded-lg shadow-xl overflow-hidden"
