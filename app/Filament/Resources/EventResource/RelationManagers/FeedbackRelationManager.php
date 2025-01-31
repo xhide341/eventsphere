@@ -68,7 +68,8 @@ class FeedbackRelationManager extends RelationManager
                             ->disabled()
                     ])
                     ->modalHeading('View Feedback')
-                    ->modalWidth('lg'),
+                    ->disabledForm()
+                    ->modalActions([]),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

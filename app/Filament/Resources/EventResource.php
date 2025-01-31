@@ -242,11 +242,20 @@ class EventResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('viewAttendees')
-                    ->label('View Attendees')
-                    ->icon('heroicon-o-users')
-                    ->url(fn(Event $record): string => static::getUrl('attendees', ['record' => $record])),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('viewAttendees')
+                        ->label('Attendees')
+                        ->icon('heroicon-o-users')
+                        ->url(fn(Event $record): string => static::getUrl('attendees', ['record' => $record]))
+                        ->color('primary'),
+                    Tables\Actions\Action::make('archive')
+                        ->label('Archive')
+                        ->icon('heroicon-o-archive-box-arrow-down')
+                        ->action(fn(Event $record) => $record->update(['status' => 'Archived']))
+                        ->requiresConfirmation()
+                        ->color('warning'),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
