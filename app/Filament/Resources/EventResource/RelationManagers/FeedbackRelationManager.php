@@ -22,6 +22,7 @@ class FeedbackRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->queryStringIdentifier('comment')
             ->recordTitleAttribute('comment')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
@@ -45,31 +46,30 @@ class FeedbackRelationManager extends RelationManager
                 //
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make(),
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-o-eye')
-                    ->mountUsing(fn($form, $record) => $form->fill([
-                        'user.name' => $record->user->name,
-                        'rating' => $record->rating,
-                        'comment' => $record->comment,
-                    ]))
+                    ->mountUsing(function ($form, $record) {
+                        $form->fill([
+                            'username' => $record->user->name,
+                            'rating' => $record->rating,
+                            'comment' => $record->comment,
+                        ]);
+                    })
                     ->form([
-                        TextInput::make('user.name')
+                        TextInput::make('username')
                             ->label('User')
-                            ->default($this->record->user->name)
                             ->disabled(),
                         TextInput::make('rating')
                             ->label('Rating')
-                            ->default($this->record->rating)
                             ->disabled(),
                         Textarea::make('comment')
                             ->label('Comment')
-                            ->default($this->record->comment)
-                            ->disabled(),
+                            ->disabled()
                     ])
                     ->modalHeading('View Feedback')
                     ->modalWidth('lg'),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
