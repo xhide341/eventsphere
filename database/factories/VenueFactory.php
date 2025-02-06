@@ -37,7 +37,7 @@ class VenueFactory extends Factory
             'images' => [
                 'images/venues/2/atis-hall-1.jpg',
                 'images/venues/2/atis-hall-2.jpg',
-                'images/venues/2/atis-hall-3.jpg',                
+                'images/venues/2/atis-hall-3.jpg',
             ]
         ],
         [
@@ -105,7 +105,7 @@ class VenueFactory extends Factory
             'images' => [
                 'images/venues/8/open-stage-1.jpg',
                 'images/venues/8/open-stage-2.jpg',
-                'images/venues/8/open-stage-3.jpg',                
+                'images/venues/8/open-stage-3.jpg',
             ]
         ],
         [
@@ -128,13 +128,13 @@ class VenueFactory extends Factory
     {
         // Get a random venue data set
         $venueData = array_shift($this->venueData);
-        
+
         return [
             'name' => $venueData['name'],
             'location' => $venueData['location'],
             'capacity' => $venueData['capacity'],
             'description' => $venueData['description'],
-        ];    
+        ];
     }
 
     public function configure()
@@ -143,7 +143,7 @@ class VenueFactory extends Factory
             // Find the venue data that matches this venue's name
             $venueData = collect($this->venueData)
                 ->firstWhere('name', $venue->name);
-            
+
             // Create primary image
             VenueImage::factory()
                 ->primary()

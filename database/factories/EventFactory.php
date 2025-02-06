@@ -31,6 +31,7 @@ class EventFactory extends Factory
             'Upcoming',
             'Ongoing',
             'Completed',
+            'Archived',
             'Upcoming',
             'Upcoming',
             'Upcoming',
@@ -39,15 +40,18 @@ class EventFactory extends Factory
 
         // Adjust date ranges
         switch ($status) {
+            case 'Archived':
+                $startDate = $this->faker->dateTimeBetween('-2 months', '-1 day');
+                break;
             case 'Completed':
-                $startDate = $this->faker->dateTimeBetween('-2 months', '-1 day'); // Past events
+                $startDate = $this->faker->dateTimeBetween('-2 months', '-1 day');
                 break;
             case 'Ongoing':
                 $startDate = $this->faker->dateTimeBetween('-1 day', 'now');
                 break;
             case 'Upcoming':
             default:
-                $startDate = $this->faker->dateTimeBetween('+1 day', '+3 months'); // Next 3 months
+                $startDate = $this->faker->dateTimeBetween('+1 day', '+3 months');
                 break;
         }
 
@@ -79,11 +83,31 @@ class EventFactory extends Factory
             'end_date' => $startDate->format('d-m-Y'),
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'image' => 'https://picsum.photos/seed/' . Str::uuid() . '/640/480',
+            'image' => 'https://picsum.photos/seed/' . Str::uuid() . '/1280/960',
             'status' => $status,
             'speaker_id' => function () {
                 return Speaker::query()->inRandomOrder()->first()?->id
                     ?? Speaker::factory()->create()->id;
+            },
+            'venue_id' => function () use ($startDate, $startTime, $endTime) {
+                do {
+                    $venue = Venue::query()->inRandomOrder()->first();
+
+                    // Check for scheduling conflicts
+                    $conflict = Event::where('venue_id', $venue->id)
+                        ->where(function ($query) use ($startDate, $startTime, $endTime) {
+                        $query->where(function ($query) use ($startDate, $startTime, $endTime) {
+                            $query->where('start_date', $startDate->format('Y-m-d'))
+                                ->whereBetween('start_time', [$startTime, $endTime]);
+                        })->orWhere(function ($query) use ($startDate, $startTime, $endTime) {
+                            $query->where('end_date', $startDate->format('Y-m-d'))
+                                ->whereBetween('end_time', [$startTime, $endTime]);
+                        });
+                    })
+                        ->exists();
+                } while ($conflict);
+
+                return $venue->id;
             },
         ];
     }
